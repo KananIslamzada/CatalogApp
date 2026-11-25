@@ -89,5 +89,10 @@
     "emptyTitle": "Hələ seçilmiş yoxdur",
     "emptyMessage": "Məhsulu burada saxlamaq üçün ürəyə toxunun. Seçilmişlər oflayn da işləyir.",
     "saveFailed": "Seçilmişləri yeniləmək alınmadı"
+  },
+  "network": {
+    "offlineTitle": "İnternet bağlantısı yoxdur",
+    "offlineMessage": "Saxlanmış məhsullar göstərilir",
+    "backOnline": "Bağlantı bərpa olundu"
   }
 }

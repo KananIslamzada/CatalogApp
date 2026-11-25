@@ -4,6 +4,7 @@ import { showToast } from '@/components/ui/toast/show-toast';
 import { t, type TranslationKey } from '@/i18n';
 
 import { errorMessageKey, isApiError } from './api';
+import { connectOnlineManager } from './network';
 
 const MAX_RETRIES = 2;
 
@@ -28,6 +29,8 @@ declare module '@tanstack/react-query' {
     mutationMeta: { errorKey?: TranslationKey };
   }
 }
+
+connectOnlineManager();
 
 export const queryClient = new QueryClient({
   queryCache: new QueryCache({

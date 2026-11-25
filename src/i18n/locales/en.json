@@ -89,5 +89,10 @@
     "emptyTitle": "No favourites yet",
     "emptyMessage": "Tap the heart on a product to keep it here. Favourites work offline too.",
     "saveFailed": "Couldn't update favourites"
+  },
+  "network": {
+    "offlineTitle": "You're offline",
+    "offlineMessage": "Showing saved products",
+    "backOnline": "Back online"
   }
 }
