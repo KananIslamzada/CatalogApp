@@ -19,10 +19,16 @@ import { useTranslation } from '@/i18n';
 import { spacing, useThemedStyles, type Theme } from '@/theme';
 
 import GalleryDots from './gallery-dots';
-import { AnimatedImage, productImageTag, productImageTransition } from './shared-image';
+import {
+  AnimatedImage,
+  productImageTag,
+  productImageTransition,
+  type ProductSource,
+} from './shared-image';
 
 type ProductGalleryProps = {
   productId: number;
+  source: ProductSource | null;
   title: string;
   thumbnail: string;
   pages: string[];
@@ -35,6 +41,7 @@ type ProductGalleryProps = {
 
 function ProductGallery({
   productId,
+  source,
   title,
   thumbnail,
   pages,
@@ -96,7 +103,9 @@ function ProductGallery({
             >
               {page === 0 ? (
                 <AnimatedImage
-                  sharedTransitionTag={index === 0 ? productImageTag(productId) : undefined}
+                  sharedTransitionTag={
+                    source && index === 0 ? productImageTag(source, productId) : undefined
+                  }
                   sharedTransitionStyle={productImageTransition}
                   source={uri}
                   placeholder={thumbnail}

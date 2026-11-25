@@ -23,7 +23,7 @@ export default function FavouritesScreen() {
   const { bottom } = useSafeAreaInsets();
   const iconSize = useScaledSize(24);
   const { data: favourites = [], isPending } = useFavourites();
-  const openProduct = useOpenProduct();
+  const openProduct = useOpenProduct('favourites');
 
   const goBack = useCallback(() => {
     if (router.canGoBack()) router.back();
@@ -33,7 +33,7 @@ export default function FavouritesScreen() {
   const renderItem: ListRenderItem<Product> = useCallback(
     ({ item, index }) => (
       <View style={index % GRID_COLUMNS === 0 ? styles.leftCell : styles.rightCell}>
-        <ProductCard product={item} onPress={openProduct} />
+        <ProductCard product={item} source="favourites" onPress={openProduct} />
       </View>
     ),
     [openProduct],

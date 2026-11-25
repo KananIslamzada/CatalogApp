@@ -7,6 +7,7 @@ import { ApiError } from '@/lib/api';
 import { renderWithQueryClient } from '@/test-utils/query-client';
 
 import { makeProduct } from '../__fixtures__/products';
+import { createClientWithFavourites } from '../__fixtures__/query-client';
 import ProductList from '../components/product-list';
 import { useProductList } from '../hooks/use-product-list';
 
@@ -58,7 +59,7 @@ describe('ProductList', () => {
   it('shows the skeleton while the first page loads', async () => {
     mockState({ status: 'pending' });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText('skeleton')).toBeOnTheScreen();
     expect(screen.getByText('Catalog header')).toBeOnTheScreen();
@@ -70,7 +71,7 @@ describe('ProductList', () => {
       error: new ApiError('network', 'offline'),
     });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText("Couldn't load products")).toBeOnTheScreen();
     expect(screen.getByText('Catalog header')).toBeOnTheScreen();
@@ -82,7 +83,7 @@ describe('ProductList', () => {
   it('shows the empty state when the catalog has no products', async () => {
     mockState({ products: [] });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText('No products yet')).toBeOnTheScreen();
   });
@@ -93,7 +94,7 @@ describe('ProductList', () => {
       hasNextPage: true,
     });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText('Mascara')).toBeOnTheScreen();
     expect(screen.getByText('Lipstick')).toBeOnTheScreen();
@@ -108,7 +109,7 @@ describe('ProductList', () => {
       isFetchNextPageError: true,
     });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText("Couldn't load more")).toBeOnTheScreen();
     await fireEvent.press(screen.getByRole('button', { name: 'Try again' }));
@@ -118,7 +119,7 @@ describe('ProductList', () => {
   it('tells the user when the end of the catalog is reached', async () => {
     mockState({ products: [makeProduct(1)], hasNextPage: false });
 
-    await renderWithQueryClient(<List term="" />);
+    await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
     expect(screen.getByText("That's everything")).toBeOnTheScreen();
   });
@@ -126,7 +127,7 @@ describe('ProductList', () => {
   it('explains when a search has no matches', async () => {
     mockState({ products: [], isSearching: true });
 
-    await renderWithQueryClient(<List term="redzz" />);
+    await renderWithQueryClient(<List term="redzz" />, createClientWithFavourites());
 
     expect(screen.getByText('No matches')).toBeOnTheScreen();
     expect(
@@ -137,7 +138,7 @@ describe('ProductList', () => {
   it('labels a failed search as a search error', async () => {
     mockState({ status: 'error', isSearching: true, error: new ApiError('timeout', 'slow') });
 
-    await renderWithQueryClient(<List term="red" />);
+    await renderWithQueryClient(<List term="red" />, createClientWithFavourites());
 
     expect(screen.getByText('Search failed')).toBeOnTheScreen();
   });

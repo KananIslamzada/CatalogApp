@@ -11,4 +11,5 @@ export { useSearchRowHeight } from './hooks/use-search-row-height';
 export { useProductQuery } from './hooks/use-product-query';
 export { useProductSearchQuery } from './hooks/use-product-search-query';
 export { PAGE_SIZE, useProductsQuery } from './hooks/use-products-query';
+export { parseProductSource, type ProductSource } from './components/shared-image';
 export { type DataSource, type Product, type ProductPage } from './types';

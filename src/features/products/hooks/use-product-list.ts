@@ -32,7 +32,7 @@ export function useProductList(term: string) {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  const openProduct = useOpenProduct();
+  const openProduct = useOpenProduct('catalog');
 
   const shared = { isRefreshing, onRefresh, onEndReached, retryNextPage, openProduct };
 

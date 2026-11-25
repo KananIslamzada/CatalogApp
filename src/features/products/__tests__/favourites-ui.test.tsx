@@ -28,7 +28,9 @@ describe('favourites UI', () => {
     mockedAdd.mockImplementation(async (product) => {
       saved.push(product);
     });
-    await renderWithQueryClient(<ProductCard product={makeProduct(8)} onPress={jest.fn()} />);
+    await renderWithQueryClient(
+      <ProductCard source="catalog" product={makeProduct(8)} onPress={jest.fn()} />,
+    );
 
     await fireEvent.press(await screen.findByRole('button', { name: 'Add to favourites' }));
 

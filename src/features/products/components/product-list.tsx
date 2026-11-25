@@ -59,7 +59,7 @@ function ProductList({ term, header, onScroll, listRef }: ProductListProps) {
       <Animated.View
         style={[index % GRID_COLUMNS === 0 ? styles.leftCell : styles.rightCell, staleStyle]}
       >
-        <ProductCard product={item} onPress={openProduct} />
+        <ProductCard product={item} source="catalog" onPress={openProduct} />
       </Animated.View>
     ),
     [openProduct, staleStyle],

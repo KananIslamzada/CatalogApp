@@ -17,10 +17,16 @@ import { useFavouriteToggle } from '../hooks/use-favourites';
 import { type Product } from '../types';
 import FavouriteButton from './favourite-button';
 import ProductRating from './product-rating';
-import { AnimatedImage, productImageTag, productImageTransition } from './shared-image';
+import {
+  AnimatedImage,
+  productImageTag,
+  productImageTransition,
+  type ProductSource,
+} from './shared-image';
 
 type ProductCardProps = {
   product: Product;
+  source: ProductSource;
   onPress: (id: number) => void;
 };
 
@@ -30,7 +36,7 @@ const TITLE_LINES = 2;
 const FAVOURITE_ACTION = 'toggleFavourite';
 const FAVOURITE_SIZE = 34;
 
-function ProductCard({ product, onPress }: ProductCardProps) {
+function ProductCard({ product, source, onPress }: ProductCardProps) {
   const { t, locale } = useTranslation();
   const styles = useThemedStyles(createStyles);
   const { animatedStyle, onPressIn, onPressOut } = usePressFeedback();
@@ -74,7 +80,7 @@ function ProductCard({ product, onPress }: ProductCardProps) {
     >
       <View style={styles.media}>
         <AnimatedImage
-          sharedTransitionTag={productImageTag(product.id)}
+          sharedTransitionTag={productImageTag(source, product.id)}
           sharedTransitionStyle={productImageTransition}
           source={product.thumbnail}
           recyclingKey={String(product.id)}
