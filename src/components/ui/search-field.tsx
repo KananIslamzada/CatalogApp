@@ -51,7 +51,7 @@ function SearchField({
   const clear = useCallback(() => onChangeText(''), [onChangeText]);
 
   return (
-    <GlassSurface style={styles.container}>
+    <GlassSurface interactive style={styles.container}>
       <Search size={iconSize} color={colors.textMuted} />
       <TextInput
         ref={ref}

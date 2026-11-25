@@ -34,7 +34,6 @@ function ProductCard({ product, onPress }: ProductCardProps) {
 
   return (
     <AnimatedPressable
-      renderToHardwareTextureAndroid
       accessibilityRole="button"
       accessibilityLabel={t('product.cardLabel', {
         title: product.title,

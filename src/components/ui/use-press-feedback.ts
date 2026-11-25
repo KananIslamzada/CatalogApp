@@ -1,9 +1,11 @@
 import { useCallback, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withSpring, withTiming } from 'react-native-reanimated';
 
 import { easeOut } from '@/theme';
 
 const PRESS_SCALE = 0.996;
+const SCALES_ON_PRESS = Platform.OS === 'ios';
 const PRESS_OPACITY = 0.8;
 const SCALE_SPRING = { damping: 15, stiffness: 400 };
 const OPACITY_IN = { duration: 80 };
@@ -42,7 +44,7 @@ export function usePressFeedback({
   }));
 
   const onPressIn = useCallback(() => {
-    scale.set(withSpring(pressedScale, SCALE_SPRING));
+    if (SCALES_ON_PRESS) scale.set(withSpring(pressedScale, SCALE_SPRING));
     pressOpacity.set(withTiming(PRESS_OPACITY, OPACITY_IN));
   }, [pressOpacity, pressedScale, scale]);
 
