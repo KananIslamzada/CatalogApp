@@ -13,6 +13,7 @@ Catalog: a signed-in user browses the DummyJSON product catalogue, searches it, 
 | Offline data   | `expo-sqlite`                                                                                 | Products and favourites are relational, queryable and can be large. Survives restarts, works fully offline.                                                       |
 | Key-value      | `react-native-mmkv`                                                                           | Synchronous, fast storage for non-sensitive prefs (e.g. locale override).                                                                                         |
 | Secrets        | `expo-secure-store`                                                                           | Access/refresh tokens live in Keychain / Keystore only.                                                                                                           |
+| HTTP           | `fetch` + small client in `lib/api`                                                           | No extra dependency; refresh, timeout and zod validation are a few dozen lines and fully tested.                                                                  |
 | Network status | `expo-network`                                                                                | Feeds React Query's `onlineManager` and the offline banner.                                                                                                       |
 | Forms          | `react-hook-form` + `zod`                                                                     | Uncontrolled inputs (no re-render per keystroke), schema gives typed values and messages.                                                                         |
 | Lists          | `@shopify/flash-list` v2                                                                      | Cell recycling, smooth on mid-range Android in release builds.                                                                                                    |
@@ -60,3 +61,4 @@ Screens never call `fetch` or SQLite directly.
 
 - [ui-theming-i18n.md](ui-theming-i18n.md): theme, UI primitives, translations, Jest setup.
 - [storage.md](storage.md): secure tokens, MMKV, SQLite schema and migrations.
+- [networking.md](networking.md): API client, token refresh, errors.
