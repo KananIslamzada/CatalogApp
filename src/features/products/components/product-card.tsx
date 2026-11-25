@@ -1,4 +1,3 @@
-import { Image } from 'expo-image';
 import { memo, useCallback } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -10,7 +9,7 @@ import { MAX_FONT_SCALE, radius, spacing, typography, useThemedStyles, type Them
 import { discountPercent, formatPrice, formatRating } from '../format';
 import { type Product } from '../types';
 import ProductRating from './product-rating';
-import { productImageTag, productImageTransition } from './shared-image';
+import { AnimatedImage, productImageTag, productImageTransition } from './shared-image';
 
 type ProductCardProps = {
   product: Product;
@@ -48,21 +47,17 @@ function ProductCard({ product, onPress }: ProductCardProps) {
       testID={`product-card-${product.id}`}
     >
       <View style={styles.media}>
-        <Animated.View
+        <AnimatedImage
           sharedTransitionTag={productImageTag(product.id)}
           sharedTransitionStyle={productImageTransition}
+          source={product.thumbnail}
+          recyclingKey={String(product.id)}
+          cachePolicy="memory-disk"
+          contentFit="cover"
+          transition={150}
           style={styles.image}
-        >
-          <Image
-            source={product.thumbnail}
-            recyclingKey={String(product.id)}
-            cachePolicy="memory-disk"
-            contentFit="cover"
-            transition={150}
-            style={styles.image}
-            accessible={false}
-          />
-        </Animated.View>
+          accessible={false}
+        />
         {discount !== null && (
           <View style={styles.badge}>
             <Text variant="caption" tone="inverse">
@@ -103,7 +98,8 @@ const createStyles = ({ colors }: Theme) =>
       backgroundColor: colors.surfaceMuted,
     },
     image: {
-      ...StyleSheet.absoluteFill,
+      width: '100%',
+      height: '100%',
     },
     badge: {
       position: 'absolute',

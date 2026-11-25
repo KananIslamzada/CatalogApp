@@ -11,7 +11,7 @@ import { useTranslation } from '@/i18n';
 import { spacing, useThemedStyles, type Theme } from '@/theme';
 
 import GalleryDots from './gallery-dots';
-import { productImageTag, productImageTransition } from './shared-image';
+import { AnimatedImage, productImageTag, productImageTransition } from './shared-image';
 
 type ProductGalleryProps = {
   productId: number;
@@ -63,21 +63,17 @@ function ProductGallery({
               })}
             >
               {index === 0 ? (
-                <Animated.View
+                <AnimatedImage
                   sharedTransitionTag={productImageTag(productId)}
                   sharedTransitionStyle={productImageTransition}
-                  style={StyleSheet.absoluteFill}
-                >
-                  <Image
-                    source={uri}
-                    placeholder={thumbnail}
-                    placeholderContentFit="cover"
-                    cachePolicy="memory-disk"
-                    contentFit="cover"
-                    transition={200}
-                    style={StyleSheet.absoluteFill}
-                  />
-                </Animated.View>
+                  source={uri}
+                  placeholder={thumbnail}
+                  placeholderContentFit="cover"
+                  cachePolicy="memory-disk"
+                  contentFit="cover"
+                  transition={200}
+                  style={{ width: size, height: size }}
+                />
               ) : (
                 <Image
                   source={uri}
