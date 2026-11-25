@@ -12,7 +12,7 @@ type ErrorReporter = {
 };
 ```
 
-- Default reporter logs to the console. To use Sentry, Crashlytics or Bugsnag, call `setErrorReporter(...)` once at startup with an adapter; no other file changes.
+- Default reporter logs to the console in development only; release builds stay silent until a real service is plugged in, so nothing ends up in device logs. To use Sentry, Crashlytics or Bugsnag, call `setErrorReporter(...)` once at startup with an adapter; no other file changes.
 - Everything else imports `errorReporter`, which forwards to whichever reporter is plugged in.
 
 What gets reported:
@@ -32,7 +32,7 @@ The error boundary shows "Something went wrong" with Try again (`retry` re-rende
 
 ## CI
 
-`.github/workflows/ci.yml`, on pushes to `main` / `development` and on pull requests, Node from `.nvmrc` (24 LTS), npm cache:
+`.github/workflows/ci.yml`, on every push (any branch) and on pull requests, Node from `.nvmrc` (24 LTS), npm cache:
 
 1. `npm ci`
 2. `npm run format:check` (Prettier)
@@ -55,3 +55,7 @@ Maestro is not in CI: it needs a built app on an emulator (an EAS build + Maestr
 - Live updates: the offline pill announces "You're offline" / "Back online"; toasts use the alert role.
 - Overlays: the image viewer is modal for VoiceOver (`accessibilityViewIsModal`) and hides the details screen from TalkBack (`importantForAccessibility="no-hide-descendants"`) while open.
 - The catalog's floating header covers the full screen with `box-none`, so the search field has real bounds for TalkBack (see products-data.md).
+
+## Secrets in the bundle
+
+The login screen's demo-account hint is rendered only under `__DEV__`, and the credentials are passed as parameters there (the translation is `Demo account: {username} / {password}`), so the release bundle does not contain the password (checked with `npx expo export --platform android` and a search of the Hermes bundle).
