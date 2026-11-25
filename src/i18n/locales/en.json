@@ -5,7 +5,10 @@
     "back": "Go back",
     "showPassword": "Show password",
     "hidePassword": "Hide password",
-    "clearText": "Clear text"
+    "clearText": "Clear text",
+    "ok": "OK",
+    "close": "Close",
+    "goHome": "Go to catalog"
   },
   "auth": {
     "title": "Welcome back",
@@ -19,8 +22,9 @@
     "usernameRequired": "Enter your username",
     "passwordRequired": "Enter your password",
     "invalidCredentials": "Wrong username or password",
-    "sessionExpired": "Your session expired. Please sign in again.",
-    "signOut": "Sign out"
+    "sessionExpired": "Please sign in again to continue.",
+    "signOut": "Sign out",
+    "sessionExpiredTitle": "Session expired"
   },
   "home": {
     "greeting": "Hi, {name}"
@@ -35,5 +39,15 @@
     "title": "Product #{id}",
     "notFound": "Product not found",
     "notFoundMessage": "This link doesn't point to a product."
+  },
+  "links": {
+    "unsupportedTitle": "Link not supported",
+    "unsupportedMessage": "This link can't be opened in Catalog.",
+    "invalidProductTitle": "Product link is broken",
+    "invalidProductMessage": "Check the link and try again."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "This page doesn't exist."
   }
 }

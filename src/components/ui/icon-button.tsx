@@ -42,10 +42,7 @@ function IconButton({
   const styles = useThemedStyles(createStyles);
   const glassEnabled = useGlassEnabled();
   const isGlass = filled && glassEnabled;
-  const { animatedStyle, onPressIn, onPressOut } = usePressFeedback({
-    pressedScale: 0.92,
-    disabled: !!disabled,
-  });
+  const { animatedStyle, onPressIn, onPressOut } = usePressFeedback({ disabled: !!disabled });
 
   return (
     <AnimatedPressable

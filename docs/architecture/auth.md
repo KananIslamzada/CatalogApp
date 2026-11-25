@@ -18,7 +18,7 @@
 
 **Sign in.** Validate → `login()` → if a _different_ user's profile is still cached (left over from an expired session), wipe local data first → save tokens → cache profile → `signedIn`. The guard swaps the login screen for the app.
 
-**Token expiry.** Handled by the API client (see `networking.md`). When the refresh token is rejected the client clears the tokens and calls `expire()`: status becomes `signedOut` with `expired: true`, the in-memory query cache is cleared and the login screen shows "Your session expired". Local favourites and cached products are kept so the same user gets them back after signing in again.
+**Token expiry.** Handled by the API client (see `networking.md`). When the refresh token is rejected the client clears the tokens and calls `expire()`: status becomes `signedOut` with `expired: true`, the in-memory query cache is cleared and the login screen shows a "Session expired" popup (`useSessionExpiredNotice`, which then calls `acknowledgeExpiry` so it shows once). Local favourites and cached products are kept so the same user gets them back after signing in again.
 
 **Sign out.** `clearUserData()`: cancel and clear React Query, then (in parallel, failures don't block each other) clear tokens, empty SQLite, clear the expo-image memory and disk caches, then wipe MMKV. Only after that does the status flip, so a fast re-login can't race the wipe.
 
@@ -40,4 +40,4 @@
 ## Tests
 
 - `features/auth/__tests__/session-store.test.ts`: restore, sign in, user switch, failed sign in, sign out, expiry.
-- `app/__tests__/login.test.tsx` (component test of the screen): validation, trimmed username, wrong credentials, offline, expired notice.
+- `app/__tests__/login.test.tsx` (component test of the screen): validation, trimmed username, wrong credentials, offline, expired popup.

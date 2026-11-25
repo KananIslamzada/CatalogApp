@@ -9,17 +9,15 @@ import { useTranslation } from '@/i18n';
 import { layoutTransition, radius, spacing, useScaledSize, useTheme } from '@/theme';
 
 import { useLoginForm } from '../hooks/use-login-form';
-import { useSessionStore } from '../session-store';
+import { useSessionExpiredNotice } from '../hooks/use-session-expired-notice';
 
 function LoginForm() {
   const { t } = useTranslation();
   const { colors } = useTheme();
-  const expired = useSessionStore((state) => state.expired);
   const { control, errors, isSubmitting, submitError, onSubmit } = useLoginForm();
   const fieldIconSize = useScaledSize(18);
+  useSessionExpiredNotice();
   const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
-
-  const bannerMessage = submitError ?? (expired ? t('auth.sessionExpired') : null);
 
   return (
     <Animated.View
@@ -27,7 +25,7 @@ function LoginForm() {
       layout={layoutTransition}
       style={styles.container}
     >
-      {!!bannerMessage && (
+      {!!submitError && (
         <Animated.View
           entering={FadeInDown.duration(220)}
           exiting={FadeOutUp.duration(160)}
@@ -35,7 +33,7 @@ function LoginForm() {
           style={[styles.banner, { backgroundColor: colors.dangerSoft }]}
         >
           <Text tone="danger" variant="label" accessibilityRole="alert">
-            {bannerMessage}
+            {submitError}
           </Text>
         </Animated.View>
       )}

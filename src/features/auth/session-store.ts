@@ -20,6 +20,7 @@ type SessionState = {
   signIn: (credentials: Credentials) => Promise<void>;
   signOut: () => Promise<void>;
   expire: () => void;
+  acknowledgeExpiry: () => void;
 };
 
 export const useSessionStore = create<SessionState>()((set) => ({
@@ -62,6 +63,8 @@ export const useSessionStore = create<SessionState>()((set) => ({
     queryClient.clear();
     set({ status: 'signedOut', user: null, expired: true });
   },
+
+  acknowledgeExpiry: () => set({ expired: false }),
 }));
 
 apiClient.setSessionExpiredHandler(() => useSessionStore.getState().expire());
