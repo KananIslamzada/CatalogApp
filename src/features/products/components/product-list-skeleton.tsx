@@ -1,10 +1,8 @@
-import { Canvas, Group, LinearGradient, RoundedRect, vec } from '@shopify/react-native-skia';
 import { memo, useEffect } from 'react';
-import { useWindowDimensions } from 'react-native';
+import { useWindowDimensions, View } from 'react-native';
 import {
   cancelAnimation,
   Easing,
-  useDerivedValue,
   useReducedMotion,
   useSharedValue,
   withRepeat,
@@ -12,17 +10,18 @@ import {
 } from 'react-native-reanimated';
 
 import { useTranslation } from '@/i18n';
-import { radius, spacing, useTheme } from '@/theme';
+import { radius, spacing } from '@/theme';
 
 import { GRID_COLUMNS, GRID_GAP, GRID_PADDING } from './layout';
+import SkeletonBlock from './skeleton-block';
 
 const ROWS = 3;
 const INFO_HEIGHT = 84;
+const LINE_RADIUS = radius.sm / 2;
 const SHIMMER = { duration: 1300, easing: Easing.inOut(Easing.quad) };
 
 function ProductListSkeleton() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
   const { width } = useWindowDimensions();
   const reduceMotion = useReducedMotion();
   const progress = useSharedValue(0);
@@ -38,55 +37,36 @@ function ProductListSkeleton() {
   const cardHeight = cardWidth + INFO_HEIGHT;
   const height = ROWS * (cardHeight + GRID_GAP);
 
-  const start = useDerivedValue(() => vec(-contentWidth + progress.get() * contentWidth * 2, 0));
-  const end = useDerivedValue(() => vec(progress.get() * contentWidth * 2, 0));
-
-  const cards = Array.from({ length: ROWS * GRID_COLUMNS }, (_, index) => ({
-    x: (index % GRID_COLUMNS) * (cardWidth + GRID_GAP),
-    y: Math.floor(index / GRID_COLUMNS) * (cardHeight + GRID_GAP),
-  }));
+  const blocks = Array.from({ length: ROWS * GRID_COLUMNS }, (_, index) => {
+    const x = (index % GRID_COLUMNS) * (cardWidth + GRID_GAP);
+    const y = Math.floor(index / GRID_COLUMNS) * (cardHeight + GRID_GAP);
+    const lineX = x + spacing.md;
+    const lineY = y + cardWidth + spacing.md;
+    return [
+      { key: `${index}-image`, x, y, width: cardWidth, height: cardWidth, radius: radius.lg },
+      { key: `${index}-title`, x: lineX, y: lineY, width: cardWidth * 0.8, height: 12 },
+      { key: `${index}-brand`, x: lineX, y: lineY + 20, width: cardWidth * 0.5, height: 10 },
+      { key: `${index}-price`, x: lineX, y: lineY + 42, width: cardWidth * 0.35, height: 14 },
+    ];
+  }).flat();
 
   return (
-    <Canvas
+    <View
       style={{ width: contentWidth, height }}
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={t('catalog.loading')}
     >
-      <Group>
-        <LinearGradient
-          start={start}
-          end={end}
-          colors={[colors.skeleton, colors.skeletonHighlight, colors.skeleton]}
+      {blocks.map(({ key, radius: blockRadius = LINE_RADIUS, ...block }) => (
+        <SkeletonBlock
+          key={key}
+          {...block}
+          radius={blockRadius}
+          sweepWidth={contentWidth}
+          progress={progress}
         />
-        {cards.map(({ x, y }) => (
-          <Group key={`${x}-${y}`}>
-            <RoundedRect x={x} y={y} width={cardWidth} height={cardWidth} r={radius.lg} />
-            <RoundedRect
-              x={x + spacing.md}
-              y={y + cardWidth + spacing.md}
-              width={cardWidth * 0.8}
-              height={12}
-              r={radius.sm / 2}
-            />
-            <RoundedRect
-              x={x + spacing.md}
-              y={y + cardWidth + spacing.md + 20}
-              width={cardWidth * 0.5}
-              height={10}
-              r={radius.sm / 2}
-            />
-            <RoundedRect
-              x={x + spacing.md}
-              y={y + cardWidth + spacing.md + 42}
-              width={cardWidth * 0.35}
-              height={14}
-              r={radius.sm / 2}
-            />
-          </Group>
-        ))}
-      </Group>
-    </Canvas>
+      ))}
+    </View>
   );
 }
 
