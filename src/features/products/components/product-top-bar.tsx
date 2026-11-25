@@ -1,6 +1,6 @@
 import { router } from 'expo-router';
 import { ChevronLeft } from 'lucide-react-native';
-import { memo, useCallback } from 'react';
+import { memo, useCallback, type ReactNode } from 'react';
 import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -20,9 +20,10 @@ type ProductTopBarProps = {
   title?: string;
   backdropStyle?: AnimatedViewStyle;
   titleStyle?: AnimatedViewStyle;
+  accessory?: ReactNode;
 };
 
-function ProductTopBar({ title, backdropStyle, titleStyle }: ProductTopBarProps) {
+function ProductTopBar({ title, backdropStyle, titleStyle, accessory }: ProductTopBarProps) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { top } = useSafeAreaInsets();
@@ -64,6 +65,7 @@ function ProductTopBar({ title, backdropStyle, titleStyle }: ProductTopBarProps)
             </Text>
           </Animated.View>
         )}
+        {accessory}
       </View>
     </View>
   );
@@ -86,6 +88,7 @@ const styles = StyleSheet.create({
     height: TOP_BAR_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
   },
   title: {

@@ -1,5 +1,6 @@
-import { LogOut } from 'lucide-react-native';
-import { memo } from 'react';
+import { router } from 'expo-router';
+import { Heart, LogOut } from 'lucide-react-native';
+import { memo, useCallback } from 'react';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -48,6 +49,7 @@ function CatalogTopBar({
   const { top } = useSafeAreaInsets();
   const iconSize = useScaledSize(20);
   const { confirmSignOut, isSigningOut } = useConfirmSignOut();
+  const openFavourites = useCallback(() => router.push('/favourites'), []);
   const coveredHeight = top + TOP_BAR_HEIGHT + searchHeight;
   const backdropHeight = coveredHeight + BACKDROP_FADE;
 
@@ -70,6 +72,13 @@ function CatalogTopBar({
             {t('catalog.title')}
           </Text>
         </Animated.View>
+        <IconButton
+          filled
+          accessibilityLabel={t('favourites.open')}
+          onPress={openFavourites}
+          icon={<Heart size={iconSize} color={colors.textPrimary} />}
+          testID="open-favourites"
+        />
         <IconButton
           filled
           accessibilityLabel={t('auth.signOut')}
@@ -118,13 +127,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
+    gap: spacing.sm,
     paddingHorizontal: GRID_PADDING,
   },
   inlineTitle: {
     ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 72,
+    paddingHorizontal: 120,
   },
   search: {
     paddingHorizontal: GRID_PADDING,

@@ -4,15 +4,21 @@ import { type ReactNode } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { ApiError } from '@/lib/api';
-import { createQueryWrapper, createTestQueryClient } from '@/test-utils/query-client';
+import { createQueryWrapper } from '@/test-utils/query-client';
 
 import ProductDetailsScreen from '../components/product-details-screen';
 import { productKeys } from '../hooks/query-keys';
 import { loadProduct } from '../products-service';
 import { type ProductPage } from '../types';
 import { makeProduct } from '../__fixtures__/products';
+import { createClientWithFavourites } from '../__fixtures__/query-client';
 
 jest.mock('../products-service', () => ({ loadProduct: jest.fn() }));
+jest.mock('../data/favourites-repository', () => ({
+  readFavourites: jest.fn(async () => []),
+  addFavourite: jest.fn(async () => undefined),
+  removeFavourite: jest.fn(async () => undefined),
+}));
 
 const mockedLoad = jest.mocked(loadProduct);
 
@@ -31,7 +37,7 @@ describe('ProductDetailsScreen', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    client = createTestQueryClient();
+    client = createClientWithFavourites();
   });
 
   function renderScreen(id: number | null) {

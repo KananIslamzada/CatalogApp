@@ -115,6 +115,8 @@ Why the transition is a custom progress animation (320 ms ease-out): the default
 
 The overscroll stretch transforms only the image pager, not the page dots.
 
+Tags are scoped to the screen the product was opened from: `productImageTag(source, id)` gives `catalog-product-image-42` or `favourites-product-image-42`, and `useOpenProduct(source)` passes `from` in the route params, which the details route parses with `parseProductSource`. So the image only flies between a card and the details page it opened, never between the catalog and favourites grids (which show the same products). A product opened from a deep link has no source and no tag.
+
 Tests: `product-details-screen.test.tsx` (content, instant render from the list cache, skeleton, 404, retry), `find-cached-product.test.ts`, `format.test.ts`.
 
 Jest: `standard-navigation` (pulled in by expo-router) is ESM-only, so it is in `transformIgnorePatterns`.

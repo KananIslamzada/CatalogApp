@@ -9,7 +9,14 @@ import { easeOut } from '@/theme';
 
 export const AnimatedImage = Animated.createAnimatedComponent(Image);
 
-export const productImageTag = (id: number) => `product-image-${id}`;
+export type ProductSource = 'catalog' | 'favourites';
+
+export function parseProductSource(value: unknown): ProductSource | null {
+  return value === 'catalog' || value === 'favourites' ? value : null;
+}
+
+export const productImageTag = (source: ProductSource, id: number) =>
+  `${source}-product-image-${id}`;
 
 function lerp(from: number, to: number, progress: number) {
   'worklet';

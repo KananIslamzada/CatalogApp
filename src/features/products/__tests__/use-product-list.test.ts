@@ -95,7 +95,7 @@ describe('useProductList', () => {
 
     expect(router.push).toHaveBeenCalledWith({
       pathname: '/product/[id]',
-      params: { id: '42' },
+      params: { id: '42', from: 'catalog' },
     });
   });
 

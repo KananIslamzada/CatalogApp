@@ -14,9 +14,11 @@ import { useProductQuery } from '../hooks/use-product-query';
 import ImageViewer from './image-viewer';
 import { TOP_BAR_HEIGHT } from './layout';
 import ProductDetailsSkeleton from './product-details-skeleton';
+import ProductFavouriteButton from './product-favourite-button';
 import ProductGallery from './product-gallery';
 import ProductInfo from './product-info';
 import ProductTopBar from './product-top-bar';
+import { type ProductSource } from './shared-image';
 
 function isNotFound(error: unknown) {
   return isApiError(error) && error.kind === 'http' && error.status === 404;
@@ -35,7 +37,7 @@ function ProductNotFound() {
   );
 }
 
-function ProductDetails({ id }: { id: number }) {
+function ProductDetails({ id, source }: { id: number; source: ProductSource | null }) {
   const { t } = useTranslation();
   const { colors } = useTheme();
   const { width } = useWindowDimensions();
@@ -92,6 +94,7 @@ function ProductDetails({ id }: { id: number }) {
         <Animated.View entering={revealOnLoad ? fadeIn : undefined}>
           <ProductGallery
             productId={product.id}
+            source={source}
             title={product.title}
             thumbnail={product.thumbnail}
             pages={pages}
@@ -104,7 +107,12 @@ function ProductDetails({ id }: { id: number }) {
           <ProductInfo product={product} />
         </Animated.View>
       </Animated.ScrollView>
-      <ProductTopBar title={product.title} backdropStyle={backdropStyle} titleStyle={titleStyle} />
+      <ProductTopBar
+        title={product.title}
+        backdropStyle={backdropStyle}
+        titleStyle={titleStyle}
+        accessory={<ProductFavouriteButton product={product} />}
+      />
       {viewer && (
         <ImageViewer
           title={product.title}
@@ -119,7 +127,12 @@ function ProductDetails({ id }: { id: number }) {
   );
 }
 
-export default function ProductDetailsScreen({ id }: { id: number | null }) {
+type ProductDetailsScreenProps = {
+  id: number | null;
+  source?: ProductSource | null;
+};
+
+export default function ProductDetailsScreen({ id, source = null }: ProductDetailsScreenProps) {
   const { colors } = useTheme();
 
   return (
@@ -130,7 +143,7 @@ export default function ProductDetailsScreen({ id }: { id: number | null }) {
           <ProductTopBar />
         </>
       ) : (
-        <ProductDetails id={id} />
+        <ProductDetails id={id} source={source} />
       )}
     </View>
   );

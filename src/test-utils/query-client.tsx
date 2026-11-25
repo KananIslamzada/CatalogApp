@@ -1,5 +1,6 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { type ReactNode } from 'react';
+import { render } from '@testing-library/react-native';
+import { type ReactElement, type ReactNode } from 'react';
 
 export function createTestQueryClient() {
   return new QueryClient({
@@ -14,4 +15,8 @@ export function createQueryWrapper(client: QueryClient) {
   return function QueryWrapper({ children }: { children: ReactNode }) {
     return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
   };
+}
+
+export function renderWithQueryClient(ui: ReactElement, client = createTestQueryClient()) {
+  return render(ui, { wrapper: createQueryWrapper(client) });
 }
