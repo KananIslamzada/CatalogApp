@@ -1,0 +1,10 @@
+{
+  "common": {
+    "retry": "Yenidən cəhd et",
+    "loading": "Yüklənir",
+    "back": "Geri qayıt",
+    "showPassword": "Şifrəni göstər",
+    "hidePassword": "Şifrəni gizlət",
+    "clearText": "Mətni təmizlə"
+  }
+}

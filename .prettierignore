@@ -5,3 +5,4 @@ android
 dist
 coverage
 package-lock.json
+expo-env.d.ts

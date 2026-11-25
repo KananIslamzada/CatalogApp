@@ -19,6 +19,7 @@ Catalog: a signed-in user browses the DummyJSON product catalogue, searches it, 
 | Images         | `expo-image`                                                                                  | Memory + disk cache, downscaling, placeholders and transitions.                                                                                                   |
 | Animation      | `react-native-reanimated` 4.8 + `react-native-worklets`                                       | UI-thread animations; shared element transition list → details (stable since 4.8).                                                                                |
 | Graphics       | `@shopify/react-native-skia`                                                                  | Only where plain views can't do it well (e.g. shimmer skeletons).                                                                                                 |
+| Icons          | `lucide-react-native`                                                                         | Consistent outline set on top of `react-native-svg`, tree-shaken per icon.                                                                                        |
 | Tests          | `jest-expo`, `@testing-library/react-native`, Maestro                                         | Unit + hook + component tests in Jest, one end-to-end flow in Maestro.                                                                                            |
 | Quality        | ESLint (`eslint-config-expo` flat) + Prettier, TypeScript strict + `noUncheckedIndexedAccess` | `npm run check` runs all three gates.                                                                                                                             |
 
@@ -33,6 +34,7 @@ Reanimated/Worklets are pinned above the SDK default (4.7) to get stable shared 
 | `components/ui/`     | Design-system primitives shared by every feature (text, button, input, screen, icon).                                                               |
 | `lib/`               | Infrastructure singletons: HTTP client, secure storage, MMKV instance, SQLite database, query client.                                               |
 | `theme/`             | Light/dark palettes, spacing, typography.                                                                                                           |
+| `i18n/`              | Typed translations (en, az).                                                                                                                        |
 | `types/`             | Shared cross-feature types.                                                                                                                         |
 
 Alias: `@/*` → `src/*`.
@@ -53,3 +55,7 @@ Screens never call `fetch` or SQLite directly.
 ## Scripts
 
 `npm run start` · `ios` · `android` · `android:release` · `lint` · `typecheck` · `test` · `test:e2e` · `check`
+
+## Module docs
+
+- [ui-theming-i18n.md](ui-theming-i18n.md): theme, UI primitives, translations, Jest setup.

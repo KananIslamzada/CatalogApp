@@ -1,0 +1,10 @@
+{
+  "common": {
+    "retry": "Try again",
+    "loading": "Loading",
+    "back": "Go back",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "clearText": "Clear text"
+  }
+}
