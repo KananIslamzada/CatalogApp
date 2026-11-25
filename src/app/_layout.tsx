@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import { LogBox } from 'react-native';
 
 import AppProviders from '@/components/app-providers';
+import OfflineBanner from '@/components/offline-banner';
 import { AppDialogHost, ToastHost } from '@/components/ui';
 import { useSessionBootstrap } from '@/features/auth';
 import { useTheme } from '@/theme';
@@ -49,6 +50,7 @@ export default function RootLayout() {
         </Stack>
       </ThemeProvider>
       <StatusBar style={scheme === 'dark' ? 'light' : 'dark'} />
+      <OfflineBanner />
       <ToastHost />
       <AppDialogHost />
     </AppProviders>
