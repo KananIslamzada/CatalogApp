@@ -19,6 +19,7 @@ Catalog: a signed-in user browses the DummyJSON product catalogue, searches it, 
 | Lists          | `@shopify/flash-list` v2                                                                      | Cell recycling, smooth on mid-range Android in release builds.                                                                                                    |
 | Images         | `expo-image`                                                                                  | Memory + disk cache, downscaling, placeholders and transitions.                                                                                                   |
 | Animation      | `react-native-reanimated` 4.8 + `react-native-worklets`                                       | UI-thread animations; shared element transition list → details (stable since 4.8).                                                                                |
+| Glass          | `expo-glass-effect`                                                                           | Native iOS 26 Liquid Glass for buttons and floating chrome, with a solid fallback elsewhere.                                                                      |
 | Graphics       | `@shopify/react-native-skia`                                                                  | Only where plain views can't do it well (e.g. shimmer skeletons).                                                                                                 |
 | Icons          | `lucide-react-native`                                                                         | Consistent outline set on top of `react-native-svg`, tree-shaken per icon.                                                                                        |
 | Tests          | `jest-expo`, `@testing-library/react-native`, Maestro                                         | Unit + hook + component tests in Jest, one end-to-end flow in Maestro.                                                                                            |
@@ -62,3 +63,4 @@ Screens never call `fetch` or SQLite directly.
 - [ui-theming-i18n.md](ui-theming-i18n.md): theme, UI primitives, translations, Jest setup.
 - [storage.md](storage.md): secure tokens, MMKV, SQLite schema and migrations.
 - [networking.md](networking.md): API client, token refresh, errors.
+- [auth.md](auth.md): session, login, logout, guards.

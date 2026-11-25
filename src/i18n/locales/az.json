@@ -6,5 +6,29 @@
     "showPassword": "Şifrəni göstər",
     "hidePassword": "Şifrəni gizlət",
     "clearText": "Mətni təmizlə"
+  },
+  "auth": {
+    "title": "Xoş gəlmisiniz",
+    "subtitle": "Kataloqa baxmaq üçün daxil olun.",
+    "username": "İstifadəçi adı",
+    "password": "Şifrə",
+    "usernamePlaceholder": "emilys",
+    "passwordPlaceholder": "Şifrəniz",
+    "signIn": "Daxil ol",
+    "demoHint": "Demo hesab: emilys / emilyspass",
+    "usernameRequired": "İstifadəçi adını daxil edin",
+    "passwordRequired": "Şifrəni daxil edin",
+    "invalidCredentials": "İstifadəçi adı və ya şifrə yanlışdır",
+    "sessionExpired": "Sessiyanın vaxtı bitdi. Yenidən daxil olun.",
+    "signOut": "Çıxış"
+  },
+  "home": {
+    "greeting": "Salam, {name}"
+  },
+  "errors": {
+    "network": "İnternet bağlantısı yoxdur",
+    "timeout": "Server çox gec cavab verdi",
+    "server": "Bizim tərəfdə xəta baş verdi",
+    "unknown": "Xəta baş verdi"
   }
 }

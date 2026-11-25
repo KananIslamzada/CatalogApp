@@ -1,5 +1,10 @@
 import { memo } from 'react';
-import { Text as RNText, type TextProps as RNTextProps, type TextStyle } from 'react-native';
+import {
+  StyleSheet,
+  Text as RNText,
+  type TextProps as RNTextProps,
+  type TextStyle,
+} from 'react-native';
 
 import { MAX_FONT_SCALE, typography, useTheme, type Palette, type TextVariant } from '@/theme';
 
@@ -34,6 +39,7 @@ function Text({
     <RNText
       maxFontSizeMultiplier={maxFontSizeMultiplier}
       style={[
+        styles.base,
         typography[variant],
         { color: colors[toneColor[tone]] },
         align && { textAlign: align },
@@ -43,5 +49,11 @@ function Text({
     />
   );
 }
+
+const styles = StyleSheet.create({
+  base: {
+    includeFontPadding: false,
+  },
+});
 
 export default memo(Text);

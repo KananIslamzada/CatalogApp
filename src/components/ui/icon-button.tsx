@@ -1,16 +1,19 @@
+import { GlassView } from 'expo-glass-effect';
 import { memo, type ReactNode } from 'react';
 import {
   Pressable,
   StyleSheet,
+  View,
   type PressableProps,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import Animated from 'react-native-reanimated';
 
-import { radius, useThemedStyles, type Theme } from '@/theme';
+import { useGlassEnabled } from '@/lib/glass';
+import { radius, useTheme, useThemedStyles, type Theme } from '@/theme';
 
-import { usePressScale } from './use-press-scale';
+import { usePressFeedback } from './use-press-feedback';
 
 export type IconButtonProps = Omit<
   PressableProps,
@@ -35,27 +38,42 @@ function IconButton({
   disabled,
   ...rest
 }: IconButtonProps) {
+  const { scheme } = useTheme();
   const styles = useThemedStyles(createStyles);
-  const { animatedStyle, onPressIn, onPressOut } = usePressScale(0.88);
+  const glassEnabled = useGlassEnabled();
+  const isGlass = filled && glassEnabled;
+  const { animatedStyle, onPressIn, onPressOut } = usePressFeedback({
+    pressedScale: 0.92,
+    disabled: !!disabled,
+  });
 
   return (
     <AnimatedPressable
+      renderToHardwareTextureAndroid={!disabled}
       accessibilityRole="button"
       accessibilityState={{ disabled: !!disabled }}
       hitSlop={HIT_SLOP}
       disabled={disabled}
-      onPressIn={onPressIn}
-      onPressOut={onPressOut}
+      onPressIn={isGlass ? undefined : onPressIn}
+      onPressOut={isGlass ? undefined : onPressOut}
       style={[
         styles.base,
         { width: size, height: size },
-        filled && styles.filled,
-        animatedStyle,
+        filled && !isGlass && styles.filled,
+        !isGlass && animatedStyle,
         style,
       ]}
       {...rest}
     >
-      {icon}
+      {isGlass && (
+        <GlassView
+          isInteractive={!disabled}
+          glassEffectStyle="regular"
+          colorScheme={scheme}
+          style={[StyleSheet.absoluteFill, { borderRadius: size / 2 }]}
+        />
+      )}
+      <View pointerEvents="none">{icon}</View>
     </AnimatedPressable>
   );
 }
