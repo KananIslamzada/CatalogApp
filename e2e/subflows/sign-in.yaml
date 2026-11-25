@@ -1,0 +1,13 @@
+appId: com.catalogapp.mobile
+---
+- extendedWaitUntil:
+    visible:
+      id: login-submit
+    timeout: 20000
+- tapOn:
+    id: login-username
+- inputText: ${USERNAME}
+- tapOn:
+    id: login-password
+- inputText: ${PASSWORD}
+- pressKey: Enter

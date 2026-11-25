@@ -15,7 +15,7 @@ export function useConfirmSignOut() {
       message: t('auth.signOutConfirmMessage'),
       tone: 'danger',
       actions: [
-        { label: t('auth.signOut'), onPress: signOut },
+        { label: t('auth.signOut'), onPress: signOut, testID: 'confirm-sign-out' },
         { label: t('common.cancel'), variant: 'secondary' },
       ],
     });

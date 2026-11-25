@@ -18,8 +18,8 @@ export function canServeFromCache(error: unknown): boolean {
 async function persist(task: Promise<void>) {
   try {
     await task;
-  } catch {
-    console.warn('Could not cache products');
+  } catch (error) {
+    console.warn('Could not cache products', error);
   }
 }
 

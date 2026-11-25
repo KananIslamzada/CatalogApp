@@ -1,0 +1,34 @@
+appId: com.catalogapp.mobile
+name: Browse the catalog, load more pages and open a product
+tags:
+  - catalog
+---
+- runFlow: ../subflows/fresh-login.yaml
+
+- extendedWaitUntil:
+    visible:
+      id: product-card-1
+    timeout: 20000
+- tapOn:
+    id: product-card-1
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible:
+      id: product-title
+    timeout: 15000
+- assertVisible: 'Essence Mascara Lash Princess'
+- assertVisible: 'About this product'
+- tapOn:
+    id: product-back
+    retryTapIfNoChange: false
+
+- extendedWaitUntil:
+    visible:
+      id: catalog-search
+    timeout: 10000
+- scrollUntilVisible:
+    element:
+      id: product-card-30
+    direction: DOWN
+    timeout: 30000
+    speed: 60

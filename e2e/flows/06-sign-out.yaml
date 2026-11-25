@@ -1,0 +1,28 @@
+appId: com.catalogapp.mobile
+name: Sign out asks for confirmation and returns to login
+tags:
+  - auth
+---
+- runFlow: ../subflows/fresh-login.yaml
+
+- tapOn:
+    id: sign-out
+- assertVisible: 'Sign out?'
+- tapOn: 'Cancel'
+- assertVisible: 'Hi, Emily'
+
+- tapOn:
+    id: sign-out
+- tapOn:
+    id: confirm-sign-out
+- extendedWaitUntil:
+    visible:
+      id: login-submit
+    timeout: 15000
+
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: login-submit
+    timeout: 20000

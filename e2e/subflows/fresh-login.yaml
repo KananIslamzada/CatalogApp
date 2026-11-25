@@ -1,0 +1,13 @@
+appId: com.catalogapp.mobile
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+- runFlow:
+    file: sign-in.yaml
+    env:
+      USERNAME: emilys
+      PASSWORD: emilyspass
+- extendedWaitUntil:
+    visible: 'Hi, Emily'
+    timeout: 20000

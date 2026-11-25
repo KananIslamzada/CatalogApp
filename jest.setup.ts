@@ -21,3 +21,8 @@ jest.mock('react-native-worklets', () => ({
   ...jest.requireActual('react-native-worklets'),
   getUIRuntimeHolder: () => ({}),
 }));
+
+jest.mock('expo-network', () => ({
+  ...jest.requireActual('expo-network'),
+  addNetworkStateListener: jest.fn(() => ({ remove: jest.fn() })),
+}));
