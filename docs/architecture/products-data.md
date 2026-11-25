@@ -94,3 +94,25 @@ Why old responses can't win:
 All matches come back in one request (`limit=0`): the whole catalogue is 194 products, so a search result is small. If the catalogue grew, search would move to the same infinite query as the list.
 
 Tests: `use-product-search-query.test.tsx` resolves the old term's request after the new one and asserts the new results stay and the old signal is aborted; plus debounce timing, name filtering, offline search and the list's search states.
+
+## Product details
+
+`app/(app)/product/[id].tsx` parses the id and renders `ProductDetailsScreen` (also the target of `catalog://product/<id>`).
+
+| File                                    | Role                                                                                                                                                                                                                                            |
+| --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `find-cached-product.ts`                | Looks the product up in the list and search caches. `useProductQuery` uses it as `placeholderData`, so a product opened from the grid renders on the first frame while the detail request refreshes it.                                         |
+| `components/product-details-screen.tsx` | States: placeholder or data → content; nothing yet (cold deep link) → `ProductDetailsSkeleton`, then the content fades in; 404 or an invalid id → "Product not found"; other errors → message + retry. The back button is shown in every state. |
+| `components/product-gallery.tsx`        | Square, horizontally paged `Animated.ScrollView` of the images; the first page shows the cached thumbnail as `placeholder` until the full image arrives. Each page has an accessibility label ("image 2 of 4").                                 |
+| `components/gallery-dots.tsx`           | Page dots driven by the horizontal scroll offset on the UI thread (opacity + scale, no layout).                                                                                                                                                 |
+| `components/product-info.tsx`           | Brand · category, title, price with the pre-discount price struck through and the discount pill, rating, stock (`stockLevel`: in / only N left / out), description.                                                                             |
+| `components/product-top-bar.tsx`        | Floating glass back button. Once the gallery scrolls under it, the scroll-edge backdrop and the inline title fade in (`useProductDetailScroll`). Overscroll stretches the gallery (iOS).                                                        |
+| `components/shared-image.ts`            | `productImageTag(id)` and the shared transition (320 ms ease-out). The card's image wrapper and the gallery's first page share the tag, so the thumbnail flies into the gallery and back. The discount badge sits outside the tagged view.      |
+
+Shared element transitions are on by default in Reanimated 4.8 (`ENABLE_SHARED_ELEMENT_TRANSITIONS`), but a view only moves between screens that are wrapped in a `SharedTransitionBoundary` whose `isActive` follows focus. `app/(app)/_layout.tsx` does this for every screen of the stack with `screenLayout` + `components/screen-boundary.tsx` (`useIsFocused`). Without the boundaries the views just show in place. Transitions are skipped when Reduce Motion is on, and only run when the target view exists on the first frame, which is why the placeholder data matters.
+
+The overscroll stretch transforms only the image pager, not the page dots.
+
+Tests: `product-details-screen.test.tsx` (content, instant render from the list cache, skeleton, 404, retry), `find-cached-product.test.ts`, `format.test.ts`.
+
+Jest: `standard-navigation` (pulled in by expo-router) is ESM-only, so it is in `transformIgnorePatterns`.

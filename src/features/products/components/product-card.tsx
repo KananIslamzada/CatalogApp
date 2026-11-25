@@ -10,6 +10,7 @@ import { MAX_FONT_SCALE, radius, spacing, typography, useThemedStyles, type Them
 import { discountPercent, formatPrice, formatRating } from '../format';
 import { type Product } from '../types';
 import ProductRating from './product-rating';
+import { productImageTag, productImageTransition } from './shared-image';
 
 type ProductCardProps = {
   product: Product;
@@ -47,15 +48,21 @@ function ProductCard({ product, onPress }: ProductCardProps) {
       testID={`product-card-${product.id}`}
     >
       <View style={styles.media}>
-        <Image
-          source={product.thumbnail}
-          recyclingKey={String(product.id)}
-          cachePolicy="memory-disk"
-          contentFit="cover"
-          transition={150}
+        <Animated.View
+          sharedTransitionTag={productImageTag(product.id)}
+          sharedTransitionStyle={productImageTransition}
           style={styles.image}
-          accessible={false}
-        />
+        >
+          <Image
+            source={product.thumbnail}
+            recyclingKey={String(product.id)}
+            cachePolicy="memory-disk"
+            contentFit="cover"
+            transition={150}
+            style={styles.image}
+            accessible={false}
+          />
+        </Animated.View>
         {discount !== null && (
           <View style={styles.badge}>
             <Text variant="caption" tone="inverse">

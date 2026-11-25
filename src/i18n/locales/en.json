@@ -39,11 +39,19 @@
     "unknown": "Something went wrong"
   },
   "product": {
-    "title": "Product #{id}",
     "notFound": "Product not found",
     "notFoundMessage": "This link doesn't point to a product.",
+    "errorTitle": "Couldn't load this product",
+    "loading": "Loading product",
     "cardLabel": "{title}, {price}, rated {rating} out of 5",
-    "discount": "-{percent}%"
+    "discount": "-{percent}%",
+    "imageLabel": "{title}, image {index} of {count}",
+    "originalPrice": "Was {price}",
+    "ratingLabel": "Rated {rating} out of 5",
+    "inStock": "In stock",
+    "lowStock": "Only {count} left",
+    "outOfStock": "Out of stock",
+    "about": "About this product"
   },
   "links": {
     "unsupportedTitle": "Link not supported",

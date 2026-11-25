@@ -39,11 +39,19 @@
     "unknown": "Xəta baş verdi"
   },
   "product": {
-    "title": "Məhsul #{id}",
     "notFound": "Məhsul tapılmadı",
     "notFoundMessage": "Bu keçid heç bir məhsula aparmır.",
+    "errorTitle": "Məhsulu yükləmək alınmadı",
+    "loading": "Məhsul yüklənir",
     "cardLabel": "{title}, {price}, reytinq 5-dən {rating}",
-    "discount": "-{percent}%"
+    "discount": "-{percent}%",
+    "imageLabel": "{title}, şəkil {index}/{count}",
+    "originalPrice": "Əvvəlki qiymət {price}",
+    "ratingLabel": "Reytinq 5-dən {rating}",
+    "inStock": "Stokda var",
+    "lowStock": "Cəmi {count} ədəd qalıb",
+    "outOfStock": "Stokda yoxdur",
+    "about": "Məhsul haqqında"
   },
   "links": {
     "unsupportedTitle": "Keçid dəstəklənmir",
