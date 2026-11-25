@@ -92,9 +92,11 @@ function LoginForm() {
           onPress={onSubmit}
           testID="login-submit"
         />
-        <Text variant="caption" tone="muted" align="center">
-          {t('auth.demoHint')}
-        </Text>
+        {__DEV__ && (
+          <Text variant="caption" tone="muted" align="center">
+            {t('auth.demoHint', { username: 'emilys', password: 'emilyspass' })}
+          </Text>
+        )}
       </Animated.View>
     </Animated.View>
   );

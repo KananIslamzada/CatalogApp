@@ -7,8 +7,12 @@ export type ErrorReporter = {
 };
 
 const consoleReporter: ErrorReporter = {
-  captureException: (error, context) => console.warn('[error]', error, context ?? ''),
-  captureMessage: (message, context) => console.warn('[message]', message, context ?? ''),
+  captureException: (error, context) => {
+    if (__DEV__) console.warn('[error]', error, context ?? '');
+  },
+  captureMessage: (message, context) => {
+    if (__DEV__) console.warn('[message]', message, context ?? '');
+  },
   setUser: () => undefined,
 };
 
