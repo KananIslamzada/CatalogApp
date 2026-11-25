@@ -45,5 +45,5 @@ export function useProductDetailScroll(galleryHeight: number, barBottom: number)
     return { opacity: progress, transform: [{ translateY: (1 - progress) * 6 }] };
   });
 
-  return { onScroll, galleryStyle, backdropStyle, titleStyle };
+  return { scrollY, onScroll, galleryStyle, backdropStyle, titleStyle };
 }

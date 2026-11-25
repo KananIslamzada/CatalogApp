@@ -118,3 +118,14 @@ The overscroll stretch transforms only the image pager, not the page dots.
 Tests: `product-details-screen.test.tsx` (content, instant render from the list cache, skeleton, 404, retry), `find-cached-product.test.ts`, `format.test.ts`.
 
 Jest: `standard-navigation` (pulled in by expo-router) is ESM-only, so it is in `transformIgnorePatterns`.
+
+### Full-screen image viewer
+
+Tapping a gallery image opens `components/image-viewer.tsx`, an overlay inside the details screen (not a modal route: shared transitions cannot move into a React Native `Modal` on Android, and an overlay keeps one transition we control).
+
+- `hooks/use-image-viewer-motion.ts`: one `progress` value (0 → 1, 280 ms ease-out) moves the content from the gallery's on-screen position (`galleryTop`, taken from the details scroll offset when it opens) to the centre while a black backdrop fades in. A vertical pan (Gesture Handler 3 `usePanGesture`, `activeOffsetY` ±12, `failOffsetX` ±12 so horizontal paging still wins) drags the image, scales it down slightly and fades the backdrop; releasing past 120 pt or 800 pt/s closes it, otherwise it eases back. Android back closes it too.
+- Paging is a horizontal `FlatList` starting at the tapped image, with a "2 / 4" counter and a close button.
+- The gallery follows the viewer's page (`index` / `onIndexChange` in `ProductDetails`), so closing always flies back to the image that is showing.
+- While the gallery is not on its first image, the first image drops its `sharedTransitionTag`, so navigating back to the list does not fly the wrong image into the card.
+
+Jest: Gesture Handler 3 asks worklets for the UI runtime, which the Jest build does not provide, so `jest.setup.ts` stubs `getUIRuntimeHolder`. Screens with gestures are rendered inside `GestureHandlerRootView` in tests.

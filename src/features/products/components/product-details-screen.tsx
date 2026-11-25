@@ -1,5 +1,5 @@
 import { CloudOff, SearchX } from 'lucide-react-native';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { StyleSheet, useWindowDimensions, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -11,6 +11,7 @@ import { fadeIn, spacing, useTheme } from '@/theme';
 
 import { useProductDetailScroll } from '../hooks/use-product-detail-scroll';
 import { useProductQuery } from '../hooks/use-product-query';
+import ImageViewer from './image-viewer';
 import { TOP_BAR_HEIGHT } from './layout';
 import ProductDetailsSkeleton from './product-details-skeleton';
 import ProductGallery from './product-gallery';
@@ -41,11 +42,23 @@ function ProductDetails({ id }: { id: number }) {
   const { top, bottom } = useSafeAreaInsets();
   const { data, error, isError, refetch } = useProductQuery(id);
   const [revealOnLoad] = useState(() => data === undefined);
-  const { onScroll, galleryStyle, backdropStyle, titleStyle } = useProductDetailScroll(
+  const { scrollY, onScroll, galleryStyle, backdropStyle, titleStyle } = useProductDetailScroll(
     width,
     top + TOP_BAR_HEIGHT,
   );
   const product = data?.product;
+  const pages = useMemo(() => {
+    if (!product) return [];
+    return product.images.length > 0 ? product.images : [product.thumbnail];
+  }, [product]);
+  const [galleryIndex, setGalleryIndex] = useState(0);
+  const [viewer, setViewer] = useState<{ index: number; galleryTop: number } | null>(null);
+
+  const openViewer = useCallback(
+    (index: number) => setViewer({ index, galleryTop: -Math.max(0, scrollY.get()) }),
+    [scrollY],
+  );
+  const closeViewer = useCallback(() => setViewer(null), []);
 
   if (!product) {
     return (
@@ -81,14 +94,27 @@ function ProductDetails({ id }: { id: number }) {
             productId={product.id}
             title={product.title}
             thumbnail={product.thumbnail}
-            images={product.images}
+            pages={pages}
             size={width}
+            index={galleryIndex}
+            onIndexChange={setGalleryIndex}
+            onOpen={openViewer}
             stretchStyle={galleryStyle}
           />
           <ProductInfo product={product} />
         </Animated.View>
       </Animated.ScrollView>
       <ProductTopBar title={product.title} backdropStyle={backdropStyle} titleStyle={titleStyle} />
+      {viewer && (
+        <ImageViewer
+          title={product.title}
+          pages={pages}
+          initialIndex={viewer.index}
+          galleryTop={viewer.galleryTop}
+          onIndexChange={setGalleryIndex}
+          onClosed={closeViewer}
+        />
+      )}
     </>
   );
 }

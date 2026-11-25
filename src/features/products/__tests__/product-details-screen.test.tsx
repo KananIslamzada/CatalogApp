@@ -1,5 +1,7 @@
 import { type QueryClient } from '@tanstack/react-query';
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { type ReactNode } from 'react';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { ApiError } from '@/lib/api';
 import { createQueryWrapper, createTestQueryClient } from '@/test-utils/query-client';
@@ -33,7 +35,13 @@ describe('ProductDetailsScreen', () => {
   });
 
   function renderScreen(id: number | null) {
-    return render(<ProductDetailsScreen id={id} />, { wrapper: createQueryWrapper(client) });
+    const QueryWrapper = createQueryWrapper(client);
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <GestureHandlerRootView>
+        <QueryWrapper>{children}</QueryWrapper>
+      </GestureHandlerRootView>
+    );
+    return render(<ProductDetailsScreen id={id} />, { wrapper });
   }
 
   it('shows price, rating, stock, description and the gallery', async () => {
@@ -88,5 +96,16 @@ describe('ProductDetailsScreen', () => {
 
     expect(await screen.findByText('A bold red.')).toBeOnTheScreen();
     expect(mockedLoad).toHaveBeenCalledTimes(2);
+  });
+
+  it('opens the tapped image full screen', async () => {
+    mockedLoad.mockResolvedValue({ product: lipstick, source: 'network' });
+    await renderScreen(42);
+
+    await fireEvent.press(await screen.findByTestId('gallery-image-1'));
+
+    expect(screen.getByTestId('image-viewer')).toBeOnTheScreen();
+    expect(screen.getByText('2 / 2')).toBeOnTheScreen();
+    expect(screen.getByRole('button', { name: 'Close' })).toBeOnTheScreen();
   });
 });

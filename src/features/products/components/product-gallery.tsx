@@ -1,6 +1,14 @@
 import { Image } from 'expo-image';
-import { memo } from 'react';
-import { StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { memo, useCallback, useEffect, useRef } from 'react';
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  type NativeScrollEvent,
+  type NativeSyntheticEvent,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
 import Animated, {
   useAnimatedScrollHandler,
   useSharedValue,
@@ -17,8 +25,11 @@ type ProductGalleryProps = {
   productId: number;
   title: string;
   thumbnail: string;
-  images: string[];
+  pages: string[];
   size: number;
+  index: number;
+  onIndexChange: (index: number) => void;
+  onOpen: (index: number) => void;
   stretchStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
 };
 
@@ -26,45 +37,66 @@ function ProductGallery({
   productId,
   title,
   thumbnail,
-  images,
+  pages,
   size,
+  index,
+  onIndexChange,
+  onOpen,
   stretchStyle,
 }: ProductGalleryProps) {
   const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
+  const scrollRef = useRef<Animated.ScrollView>(null);
   const scrollX = useSharedValue(0);
-  const pages = images.length > 0 ? images : [thumbnail];
 
   const onScroll = useAnimatedScrollHandler((event) => {
     scrollX.set(event.contentOffset.x);
   });
 
+  const onMomentumScrollEnd = useCallback(
+    (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      if (size > 0) onIndexChange(Math.round(event.nativeEvent.contentOffset.x / size));
+    },
+    [onIndexChange, size],
+  );
+
+  useEffect(() => {
+    const offset = index * size;
+    if (Math.round(scrollX.get()) !== Math.round(offset)) {
+      scrollRef.current?.scrollTo({ x: offset, animated: false });
+    }
+  }, [index, size, scrollX]);
+
   return (
     <View style={[styles.container, { height: size }]}>
       <Animated.View style={stretchStyle}>
         <Animated.ScrollView
+          ref={scrollRef}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
           onScroll={onScroll}
+          onMomentumScrollEnd={onMomentumScrollEnd}
           scrollEventThrottle={16}
           scrollEnabled={pages.length > 1}
         >
-          {pages.map((uri, index) => (
-            <View
-              key={`${index}-${uri}`}
+          {pages.map((uri, page) => (
+            <Pressable
+              key={`${page}-${uri}`}
+              onPress={() => onOpen(page)}
               style={{ width: size, height: size }}
-              accessible
-              accessibilityRole="image"
+              accessibilityRole="imagebutton"
               accessibilityLabel={t('product.imageLabel', {
                 title,
-                index: index + 1,
+                index: page + 1,
                 count: pages.length,
               })}
+              accessibilityHint={t('product.openImageHint')}
+              testID={`gallery-image-${page}`}
             >
-              {index === 0 ? (
+              {page === 0 ? (
                 <AnimatedImage
-                  sharedTransitionTag={productImageTag(productId)}
+                  sharedTransitionTag={index === 0 ? productImageTag(productId) : undefined}
                   sharedTransitionStyle={productImageTransition}
                   source={uri}
                   placeholder={thumbnail}
@@ -83,7 +115,7 @@ function ProductGallery({
                   style={StyleSheet.absoluteFill}
                 />
               )}
-            </View>
+            </Pressable>
           ))}
         </Animated.ScrollView>
       </Animated.View>

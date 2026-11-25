@@ -51,7 +51,9 @@
     "inStock": "Stokda var",
     "lowStock": "Cəmi {count} ədəd qalıb",
     "outOfStock": "Stokda yoxdur",
-    "about": "Məhsul haqqında"
+    "about": "Məhsul haqqında",
+    "openImageHint": "Şəkli tam ekranda açır",
+    "imageCounter": "{index} / {count}"
   },
   "links": {
     "unsupportedTitle": "Keçid dəstəklənmir",

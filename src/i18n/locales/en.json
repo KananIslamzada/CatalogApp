@@ -51,7 +51,9 @@
     "inStock": "In stock",
     "lowStock": "Only {count} left",
     "outOfStock": "Out of stock",
-    "about": "About this product"
+    "about": "About this product",
+    "openImageHint": "Opens the image full screen",
+    "imageCounter": "{index} / {count}"
   },
   "links": {
     "unsupportedTitle": "Link not supported",
