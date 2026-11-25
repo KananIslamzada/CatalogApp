@@ -1,0 +1,53 @@
+import { fireEvent, render, screen } from '@testing-library/react-native';
+
+import { makeProduct } from '../__fixtures__/products';
+import ProductCard from '../components/product-card';
+
+describe('ProductCard', () => {
+  it('shows the product and describes it for screen readers', async () => {
+    await render(
+      <ProductCard
+        product={makeProduct(1, { title: 'Red Lipstick', price: 12.99, rating: 4.36 })}
+        onPress={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByText('Red Lipstick')).toBeOnTheScreen();
+    expect(screen.getByText('$12.99')).toBeOnTheScreen();
+    expect(
+      screen.getByRole('button', { name: 'Red Lipstick, $12.99, rated 4.4 out of 5' }),
+    ).toBeOnTheScreen();
+  });
+
+  it('falls back to the category when there is no brand', async () => {
+    await render(
+      <ProductCard
+        product={makeProduct(2, { brand: undefined, category: 'groceries' })}
+        onPress={jest.fn()}
+      />,
+    );
+
+    expect(screen.getByText('groceries')).toBeOnTheScreen();
+  });
+
+  it('shows the discount badge only when there is a discount', async () => {
+    const { rerender } = await render(
+      <ProductCard product={makeProduct(3, { discountPercentage: 18.19 })} onPress={jest.fn()} />,
+    );
+    expect(screen.getByText('-18%')).toBeOnTheScreen();
+
+    await rerender(
+      <ProductCard product={makeProduct(3, { discountPercentage: 0 })} onPress={jest.fn()} />,
+    );
+    expect(screen.queryByText(/%$/)).not.toBeOnTheScreen();
+  });
+
+  it('reports which product was tapped', async () => {
+    const onPress = jest.fn();
+    await render(<ProductCard product={makeProduct(42)} onPress={onPress} />);
+
+    await fireEvent.press(screen.getByTestId('product-card-42'));
+
+    expect(onPress).toHaveBeenCalledWith(42);
+  });
+});

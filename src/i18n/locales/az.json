@@ -8,7 +8,8 @@
     "clearText": "Mətni təmizlə",
     "ok": "Oldu",
     "close": "Bağla",
-    "goHome": "Kataloqa keç"
+    "goHome": "Kataloqa keç",
+    "cancel": "Ləğv et"
   },
   "auth": {
     "title": "Xoş gəlmisiniz",
@@ -24,7 +25,9 @@
     "invalidCredentials": "İstifadəçi adı və ya şifrə yanlışdır",
     "sessionExpired": "Davam etmək üçün yenidən daxil olun.",
     "signOut": "Çıxış",
-    "sessionExpiredTitle": "Sessiyanın vaxtı bitdi"
+    "sessionExpiredTitle": "Sessiyanın vaxtı bitdi",
+    "signOutConfirmTitle": "Çıxış edilsin?",
+    "signOutConfirmMessage": "Seçilmişləriniz və saxlanmış məhsullar bu cihazdan silinəcək."
   },
   "home": {
     "greeting": "Salam, {name}"
@@ -38,7 +41,9 @@
   "product": {
     "title": "Məhsul #{id}",
     "notFound": "Məhsul tapılmadı",
-    "notFoundMessage": "Bu keçid heç bir məhsula aparmır."
+    "notFoundMessage": "Bu keçid heç bir məhsula aparmır.",
+    "cardLabel": "{title}, {price}, reytinq 5-dən {rating}",
+    "discount": "-{percent}%"
   },
   "links": {
     "unsupportedTitle": "Keçid dəstəklənmir",
@@ -49,5 +54,14 @@
   "notFound": {
     "title": "Səhifə tapılmadı",
     "message": "Belə səhifə yoxdur."
+  },
+  "catalog": {
+    "title": "Kataloq",
+    "loading": "Məhsullar yüklənir",
+    "emptyTitle": "Hələ məhsul yoxdur",
+    "emptyMessage": "Yenidən yoxlamaq üçün aşağı çəkin.",
+    "errorTitle": "Məhsulları yükləmək olmadı",
+    "loadMoreFailed": "Daha çox yükləmək olmadı",
+    "endOfList": "Hamısı budur"
   }
 }

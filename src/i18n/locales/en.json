@@ -8,7 +8,8 @@
     "clearText": "Clear text",
     "ok": "OK",
     "close": "Close",
-    "goHome": "Go to catalog"
+    "goHome": "Go to catalog",
+    "cancel": "Cancel"
   },
   "auth": {
     "title": "Welcome back",
@@ -24,7 +25,9 @@
     "invalidCredentials": "Wrong username or password",
     "sessionExpired": "Please sign in again to continue.",
     "signOut": "Sign out",
-    "sessionExpiredTitle": "Session expired"
+    "sessionExpiredTitle": "Session expired",
+    "signOutConfirmTitle": "Sign out?",
+    "signOutConfirmMessage": "Your favourites and saved products will be removed from this device."
   },
   "home": {
     "greeting": "Hi, {name}"
@@ -38,7 +41,9 @@
   "product": {
     "title": "Product #{id}",
     "notFound": "Product not found",
-    "notFoundMessage": "This link doesn't point to a product."
+    "notFoundMessage": "This link doesn't point to a product.",
+    "cardLabel": "{title}, {price}, rated {rating} out of 5",
+    "discount": "-{percent}%"
   },
   "links": {
     "unsupportedTitle": "Link not supported",
@@ -49,5 +54,14 @@
   "notFound": {
     "title": "Page not found",
     "message": "This page doesn't exist."
+  },
+  "catalog": {
+    "title": "Catalog",
+    "loading": "Loading products",
+    "emptyTitle": "No products yet",
+    "emptyMessage": "Pull down to check again.",
+    "errorTitle": "Couldn't load products",
+    "loadMoreFailed": "Couldn't load more",
+    "endOfList": "That's everything"
   }
 }

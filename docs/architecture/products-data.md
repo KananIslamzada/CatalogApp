@@ -42,3 +42,20 @@ Android emulator: 3 pages online (60 products) → network off → refresh serve
 ## Tests
 
 `__tests__/product-row.test.ts`, `products-service.test.ts` (every row of the fallback table), `use-products-query.test.tsx` (paging, cache flag, one-request refresh). Fixtures live in `__fixtures__/` so Jest does not run them as suites.
+
+## List screen
+
+`app/(app)/index.tsx` = `CatalogHeader` + `ProductList`.
+
+| File                                   | Role                                                                                                                                                                                                                                                                                                                                                                            |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `components/catalog-header.tsx`        | Large "Catalog" title, greeting, glass sign-out button. Sign-out asks for confirmation (`useConfirmSignOut`) because it deletes favourites and cached products.                                                                                                                                                                                                                 |
+| `components/product-list.tsx`          | FlashList v2, two columns. States: `pending` → skeleton, error with no data → `StateView` with retry, empty → `StateView`, otherwise the grid. Pull-to-refresh via `RefreshControl`.                                                                                                                                                                                            |
+| `components/product-card.tsx`          | Memoised card: `expo-image` thumbnail (`recyclingKey` so recycled cells never flash the previous image, `cachePolicy="memory-disk"`, 150 ms transition), discount badge, brand or category, price (`Intl.NumberFormat`, cached per locale), rating. One accessibility label for the whole card. Title reserves two lines (scaled with the font size) so cards in a row line up. |
+| `components/product-list-skeleton.tsx` | Skia canvas drawing the grid placeholders with one shared animated `LinearGradient` shimmer; static when Reduce Motion is on.                                                                                                                                                                                                                                                   |
+| `components/product-list-footer.tsx`   | Loading-more spinner, "Couldn't load more" + retry, or "That's everything".                                                                                                                                                                                                                                                                                                     |
+| `hooks/use-product-list.ts`            | Wraps `useProductsQuery`: `onEndReached` (skips when there's no next page, one is loading, or the last one failed: retry is manual so a failing page doesn't loop), `isRefreshing` (only the user's pull shows the spinner, not background refetches), `openProduct`.                                                                                                           |
+
+Performance: stable `renderItem` / `keyExtractor`, memoised cards with a stable `onPress(id)`, no inline objects per cell, images cached and recycled, skeleton is a single canvas instead of dozens of animated views.
+
+Verified on an Android emulator: skeleton, grid, scrolling through all 194 products to the end footer, pull-to-refresh, dark mode, sign-out confirmation.
