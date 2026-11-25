@@ -83,7 +83,7 @@
       "/e2e/"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@shopify/.*|react-native-.*|@tanstack/.*|zustand)"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@shopify/.*|react-native-.*|@tanstack/.*|zustand|standard-navigation)"
     ],
     "resolver": "react-native-reanimated/jest/resolver",
     "moduleNameMapper": {

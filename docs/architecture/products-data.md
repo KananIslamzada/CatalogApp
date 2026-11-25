@@ -94,3 +94,38 @@ Why old responses can't win:
 All matches come back in one request (`limit=0`): the whole catalogue is 194 products, so a search result is small. If the catalogue grew, search would move to the same infinite query as the list.
 
 Tests: `use-product-search-query.test.tsx` resolves the old term's request after the new one and asserts the new results stay and the old signal is aborted; plus debounce timing, name filtering, offline search and the list's search states.
+
+## Product details
+
+`app/(app)/product/[id].tsx` parses the id and renders `ProductDetailsScreen` (also the target of `catalog://product/<id>`).
+
+| File                                    | Role                                                                                                                                                                                                                                                                |
+| --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `find-cached-product.ts`                | Looks the product up in the list and search caches. `useProductQuery` uses it as `placeholderData`, so a product opened from the grid renders on the first frame while the detail request refreshes it.                                                             |
+| `components/product-details-screen.tsx` | States: placeholder or data → content; nothing yet (cold deep link) → `ProductDetailsSkeleton`, then the content fades in; 404 or an invalid id → "Product not found"; other errors → message + retry. The back button is shown in every state.                     |
+| `components/product-gallery.tsx`        | Square, horizontally paged `Animated.ScrollView` of the images; the first page shows the cached thumbnail as `placeholder` until the full image arrives. Each page has an accessibility label ("image 2 of 4").                                                     |
+| `components/gallery-dots.tsx`           | Page dots driven by the horizontal scroll offset on the UI thread (opacity + scale, no layout).                                                                                                                                                                     |
+| `components/product-info.tsx`           | Brand · category, title, price with the pre-discount price struck through and the discount pill, rating, stock (`stockLevel`: in / only N left / out), description.                                                                                                 |
+| `components/product-top-bar.tsx`        | Floating glass back button. Once the gallery scrolls under it, the scroll-edge backdrop and the inline title fade in (`useProductDetailScroll`). Overscroll stretches the gallery (iOS).                                                                            |
+| `components/shared-image.ts`            | `AnimatedImage` (expo-image as an animated component), `productImageTag(id)` and the transition. The card thumbnail and the gallery's first image carry the tag themselves, so the thumbnail flies into the gallery and back. The discount badge is not part of it. |
+
+Shared element transitions are on by default in Reanimated 4.8 (`ENABLE_SHARED_ELEMENT_TRANSITIONS`), but a view only moves between screens that are wrapped in a `SharedTransitionBoundary` whose `isActive` follows focus. `app/(app)/_layout.tsx` does this for every screen of the stack with `screenLayout` + `components/screen-boundary.tsx` (`useIsFocused`). Without the boundaries the views just show in place. Transitions are skipped when Reduce Motion is on, and only run when the target view exists on the first frame, which is why the placeholder data matters.
+
+Why the transition is a custom progress animation (320 ms ease-out): the default one animates the moving view's `width`/`height`, but the image inside an expo-image view (and any child of a moving view) is only laid out again when the transition ends, so the picture stayed card-sized and jumped at the end. `scaleImage` keeps the moving view at its starting size and animates its centre plus a scale matrix, so the picture itself grows and shrinks. Both images are square, so the scale is uniform. On iOS the same function follows the back swipe. The shared views use explicit sizes (`100%` in the card, `size` in the gallery), never `absoluteFill` insets.
+
+The overscroll stretch transforms only the image pager, not the page dots.
+
+Tests: `product-details-screen.test.tsx` (content, instant render from the list cache, skeleton, 404, retry), `find-cached-product.test.ts`, `format.test.ts`.
+
+Jest: `standard-navigation` (pulled in by expo-router) is ESM-only, so it is in `transformIgnorePatterns`.
+
+### Full-screen image viewer
+
+Tapping a gallery image opens `components/image-viewer.tsx`, an overlay inside the details screen (not a modal route: shared transitions cannot move into a React Native `Modal` on Android, and an overlay keeps one transition we control).
+
+- `hooks/use-image-viewer-motion.ts`: one `progress` value (0 → 1, 280 ms ease-out) moves the content from the gallery's on-screen position (`galleryTop`, taken from the details scroll offset when it opens) to the centre while a black backdrop fades in. A vertical pan (Gesture Handler 3 `usePanGesture`, `activeOffsetY` ±12, `failOffsetX` ±12 so horizontal paging still wins) drags the image, scales it down slightly and fades the backdrop; releasing past 120 pt or 800 pt/s closes it, otherwise it eases back. Android back closes it too.
+- Paging is a horizontal `FlatList` starting at the tapped image, with a "2 / 4" counter and a close button.
+- The gallery follows the viewer's page (`index` / `onIndexChange` in `ProductDetails`), so closing always flies back to the image that is showing.
+- While the gallery is not on its first image, the first image drops its `sharedTransitionTag`, so navigating back to the list does not fly the wrong image into the card.
+
+Jest: Gesture Handler 3 asks worklets for the UI runtime, which the Jest build does not provide, so `jest.setup.ts` stubs `getUIRuntimeHolder`. Screens with gestures are rendered inside `GestureHandlerRootView` in tests.

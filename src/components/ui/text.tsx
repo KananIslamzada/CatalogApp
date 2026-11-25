@@ -8,7 +8,7 @@ import {
 
 import { MAX_FONT_SCALE, typography, useTheme, type Palette, type TextVariant } from '@/theme';
 
-type TextTone = 'primary' | 'secondary' | 'muted' | 'accent' | 'danger' | 'inverse';
+type TextTone = 'primary' | 'secondary' | 'muted' | 'accent' | 'danger' | 'success' | 'inverse';
 
 const toneColor: Record<TextTone, keyof Palette> = {
   primary: 'textPrimary',
@@ -16,6 +16,7 @@ const toneColor: Record<TextTone, keyof Palette> = {
   muted: 'textMuted',
   accent: 'accent',
   danger: 'danger',
+  success: 'success',
   inverse: 'textInverse',
 };
 

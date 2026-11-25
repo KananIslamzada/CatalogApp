@@ -1,4 +1,4 @@
-import { discountPercent, formatPrice, formatRating } from '../format';
+import { discountPercent, formatPrice, formatRating, originalPrice, stockLevel } from '../format';
 
 describe('product formatting', () => {
   it('formats prices as US dollars for the locale', () => {
@@ -15,5 +15,17 @@ describe('product formatting', () => {
     expect(discountPercent(10.48)).toBe(10);
     expect(discountPercent(0.4)).toBeNull();
     expect(discountPercent(0)).toBeNull();
+  });
+
+  it('works out the price before the discount', () => {
+    expect(originalPrice(80, 20)).toBeCloseTo(100);
+    expect(originalPrice(9.99, 0.4)).toBeNull();
+    expect(originalPrice(10, 100)).toBeNull();
+  });
+
+  it('groups stock into in, low and out', () => {
+    expect(stockLevel(0)).toBe('out');
+    expect(stockLevel(5)).toBe('low');
+    expect(stockLevel(6)).toBe('in');
   });
 });

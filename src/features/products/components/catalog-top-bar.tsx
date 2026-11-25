@@ -52,7 +52,7 @@ function CatalogTopBar({
   const backdropHeight = coveredHeight + BACKDROP_FADE;
 
   return (
-    <View pointerEvents="box-none" style={[styles.container, { paddingTop: top }]}>
+    <View style={[styles.container, { paddingTop: top }]}>
       <Animated.View
         pointerEvents="none"
         style={[styles.backdrop, { height: backdropHeight }, backdropStyle]}
