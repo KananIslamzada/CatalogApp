@@ -88,6 +88,7 @@ function AppDialogHost() {
                   variant={action.variant ?? 'primary'}
                   glass={false}
                   onPress={() => close(action.onPress)}
+                  testID={action.testID}
                 />
               ))}
             </View>

@@ -7,6 +7,7 @@ export type DialogAction = {
   label: string;
   variant?: 'primary' | 'secondary';
   onPress?: () => void;
+  testID?: string;
 };
 
 export type DialogOptions = {

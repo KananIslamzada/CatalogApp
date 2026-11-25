@@ -1,0 +1,43 @@
+appId: com.catalogapp.mobile
+name: Login validates input, rejects wrong credentials and restores the session
+tags:
+  - auth
+---
+- launchApp:
+    clearState: true
+    clearKeychain: true
+- extendedWaitUntil:
+    visible:
+      id: login-submit
+    timeout: 20000
+
+- tapOn:
+    id: login-submit
+- assertVisible: 'Enter your username'
+- assertVisible: 'Enter your password'
+
+- runFlow:
+    file: ../subflows/sign-in.yaml
+    env:
+      USERNAME: emilys
+      PASSWORD: wrong-password
+- extendedWaitUntil:
+    visible: 'Wrong username or password'
+    timeout: 15000
+
+- tapOn:
+    id: login-password
+- eraseText: 30
+- inputText: emilyspass
+- pressKey: Enter
+- extendedWaitUntil:
+    visible: 'Hi, Emily'
+    timeout: 20000
+
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: 'Hi, Emily'
+    timeout: 20000
+- assertNotVisible:
+    id: login-submit

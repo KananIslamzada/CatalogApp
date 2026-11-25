@@ -1,0 +1,38 @@
+appId: com.catalogapp.mobile
+name: Favourite a product, keep it after a restart, then remove it
+tags:
+  - favourites
+---
+- runFlow: ../subflows/fresh-login.yaml
+- extendedWaitUntil:
+    visible:
+      id: favourite-1
+    timeout: 20000
+
+- tapOn:
+    id: favourite-1
+    retryTapIfNoChange: false
+- tapOn:
+    id: open-favourites
+- extendedWaitUntil:
+    visible: 'Essence Mascara Lash Princess'
+    timeout: 10000
+
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: open-favourites
+    timeout: 20000
+- tapOn:
+    id: open-favourites
+- extendedWaitUntil:
+    visible: 'Essence Mascara Lash Princess'
+    timeout: 10000
+
+- tapOn:
+    id: favourite-1
+    retryTapIfNoChange: false
+- extendedWaitUntil:
+    visible: 'No favourites yet'
+    timeout: 10000

@@ -6,7 +6,7 @@ import { useDialogStore } from '@/components/ui/app-dialog/dialog-store';
 import { useSessionStore } from '@/features/auth';
 import { ApiError } from '@/lib/api';
 
-import LoginScreen from '../login';
+import LoginScreen from '@/app/login';
 
 jest.mock('@/features/auth/api/auth-api', () => ({ login: jest.fn() }));
 jest.mock('@/lib/secure-storage', () => ({

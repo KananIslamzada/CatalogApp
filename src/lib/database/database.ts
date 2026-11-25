@@ -22,9 +22,18 @@ export function getDatabase(): Promise<SQLiteDatabase> {
   return databasePromise;
 }
 
-export async function clearDatabase(): Promise<void> {
-  const db = await getDatabase();
-  await db.withTransactionAsync(async () => {
-    await db.execAsync('DELETE FROM favourites; DELETE FROM products;');
-  });
+let pendingWrite: Promise<unknown> = Promise.resolve();
+
+export function writeDatabase<T>(task: (db: SQLiteDatabase) => Promise<T>): Promise<T> {
+  const write = pendingWrite.then(async () => task(await getDatabase()));
+  pendingWrite = write.catch(() => undefined);
+  return write;
+}
+
+export function clearDatabase(): Promise<void> {
+  return writeDatabase((db) =>
+    db.withTransactionAsync(async () => {
+      await db.execAsync('DELETE FROM favourites; DELETE FROM products;');
+    }),
+  );
 }

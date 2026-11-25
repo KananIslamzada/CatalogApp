@@ -25,6 +25,7 @@ Three stores, each for one kind of data. All of them are wiped on logout.
 - `getDatabase()` opens and migrates once and caches the promise. If opening fails, the cache is reset so the next call retries.
 - Migrations live in `migrations.ts` as an ordered array of SQL strings. `runMigrations` compares the array length with `PRAGMA user_version` and runs only the pending ones inside a transaction. To change the schema, **append** a new migration and never edit a shipped one.
 - `clearDatabase()` deletes all rows from all tables in one transaction.
+- **Every write goes through `writeDatabase(task)`**, a small promise queue that runs writes one after another (reads stay concurrent). expo-sqlite's `withTransactionAsync` is not exclusive: two transactions started at the same time on the one connection collide ("cannot start a transaction within a transaction"). That happened on deep-link cold starts, where the details screen and the catalog behind it both cache products at once, and showed up as "Could not cache products". `withExclusiveTransactionAsync` is not the fix either: it makes the other writes fail with "database is locked". A failed write rejects its own caller and does not block the queue.
 
 ### Schema (v1)
 

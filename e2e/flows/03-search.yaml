@@ -1,0 +1,30 @@
+appId: com.catalogapp.mobile
+name: Search by product name, clear it and handle no matches
+tags:
+  - catalog
+---
+- runFlow: ../subflows/fresh-login.yaml
+- extendedWaitUntil:
+    visible:
+      id: product-card-1
+    timeout: 20000
+
+- tapOn:
+    id: catalog-search
+- inputText: lipstick
+- extendedWaitUntil:
+    visible: 'Red Lipstick'
+    timeout: 15000
+- assertNotVisible: 'Essence Mascara Lash Princess'
+
+- tapOn: 'Clear text'
+- extendedWaitUntil:
+    visible: 'Essence Mascara Lash Princess'
+    timeout: 15000
+
+- tapOn:
+    id: catalog-search
+- inputText: zzzzqq
+- extendedWaitUntil:
+    visible: 'No matches'
+    timeout: 15000

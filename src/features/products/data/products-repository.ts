@@ -1,4 +1,4 @@
-import { getDatabase } from '@/lib/database';
+import { getDatabase, writeDatabase } from '@/lib/database';
 
 import { type Product } from '../types';
 import { productToParams, rowToProduct, type ProductRow } from './product-row';
@@ -25,18 +25,19 @@ const UPSERT_PRODUCT = `
 export async function saveProducts(products: Product[]): Promise<void> {
   if (products.length === 0) return;
 
-  const db = await getDatabase();
-  const cachedAt = Date.now();
-  const statement = await db.prepareAsync(UPSERT_PRODUCT);
-  try {
-    await db.withTransactionAsync(async () => {
-      for (const product of products) {
-        await statement.executeAsync(productToParams(product, cachedAt));
-      }
-    });
-  } finally {
-    await statement.finalizeAsync();
-  }
+  await writeDatabase(async (db) => {
+    const cachedAt = Date.now();
+    const statement = await db.prepareAsync(UPSERT_PRODUCT);
+    try {
+      await db.withTransactionAsync(async () => {
+        for (const product of products) {
+          await statement.executeAsync(productToParams(product, cachedAt));
+        }
+      });
+    } finally {
+      await statement.finalizeAsync();
+    }
+  });
 }
 
 export async function readProductsPage(

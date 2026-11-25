@@ -1,4 +1,4 @@
-import { getDatabase } from '@/lib/database';
+import { getDatabase, writeDatabase } from '@/lib/database';
 
 import { type Product } from '../types';
 import { rowToProduct, type ProductRow } from './product-row';
@@ -16,14 +16,14 @@ export async function readFavourites(): Promise<Product[]> {
 
 export async function addFavourite(product: Product): Promise<void> {
   await saveProducts([product]);
-  const db = await getDatabase();
-  await db.runAsync('INSERT OR REPLACE INTO favourites (product_id, created_at) VALUES (?, ?)', [
-    product.id,
-    Date.now(),
-  ]);
+  await writeDatabase((db) =>
+    db.runAsync('INSERT OR REPLACE INTO favourites (product_id, created_at) VALUES (?, ?)', [
+      product.id,
+      Date.now(),
+    ]),
+  );
 }
 
 export async function removeFavourite(id: number): Promise<void> {
-  const db = await getDatabase();
-  await db.runAsync('DELETE FROM favourites WHERE product_id = ?', [id]);
+  await writeDatabase((db) => db.runAsync('DELETE FROM favourites WHERE product_id = ?', [id]));
 }

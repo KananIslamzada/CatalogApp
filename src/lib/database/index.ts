@@ -1,1 +1,1 @@
-export { clearDatabase, getDatabase } from './database';
+export { clearDatabase, getDatabase, writeDatabase } from './database';
