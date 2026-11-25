@@ -4,7 +4,6 @@ import {
   Pressable,
   StyleSheet,
   TextInput,
-  View,
   type NativeSyntheticEvent,
   type StyleProp,
   type TargetedEvent,
@@ -20,11 +19,15 @@ import Animated, {
 
 import { useTranslation } from '@/i18n';
 import {
+  fadeIn,
+  fadeOut,
+  layoutTransition,
   MAX_FONT_SCALE,
   radius,
   spacing,
   typography,
   useTheme,
+  useScaledSize,
   useThemedStyles,
   type Theme,
 } from '@/theme';
@@ -60,15 +63,13 @@ function TextField({
   const [isSecretVisible, setSecretVisible] = useState(false);
   const focus = useSharedValue(0);
   const hasError = !!error;
+  const toggleIconSize = useScaledSize(20);
 
-  const fieldStyle = useAnimatedStyle(
-    () => ({
-      borderColor: hasError
-        ? colors.danger
-        : interpolateColor(focus.get(), [0, 1], [colors.border, colors.accent]),
-    }),
-    [colors, focus, hasError],
-  );
+  const fieldStyle = useAnimatedStyle(() => ({
+    borderColor: hasError
+      ? colors.danger
+      : interpolateColor(focus.get(), [0, 1], [colors.border, colors.accent]),
+  }));
 
   const handleFocus = useCallback(
     (event: FocusEvent) => {
@@ -91,7 +92,7 @@ function TextField({
   const SecretIcon = isSecretVisible ? EyeOff : Eye;
 
   return (
-    <View style={[styles.wrapper, containerStyle]}>
+    <Animated.View layout={layoutTransition} style={[styles.wrapper, containerStyle]}>
       <Text variant="label" tone="secondary">
         {label}
       </Text>
@@ -123,21 +124,23 @@ function TextField({
             hitSlop={spacing.md}
             onPress={toggleSecret}
           >
-            <SecretIcon size={20} color={colors.textMuted} />
+            <SecretIcon size={toggleIconSize} color={colors.textMuted} />
           </Pressable>
         )}
       </Animated.View>
       {hasError && (
-        <Text
-          variant="caption"
-          tone="danger"
-          accessibilityLiveRegion="polite"
-          accessibilityRole="alert"
-        >
-          {error}
-        </Text>
+        <Animated.View entering={fadeIn} exiting={fadeOut}>
+          <Text
+            variant="caption"
+            tone="danger"
+            accessibilityLiveRegion="polite"
+            accessibilityRole="alert"
+          >
+            {error}
+          </Text>
+        </Animated.View>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
@@ -157,9 +160,12 @@ const createStyles = ({ colors }: Theme) =>
       backgroundColor: colors.surface,
     },
     input: {
-      ...typography.body,
       flex: 1,
+      fontSize: typography.body.fontSize,
+      fontWeight: typography.body.fontWeight,
       paddingVertical: spacing.md,
+      includeFontPadding: false,
+      textAlignVertical: 'center',
       color: colors.textPrimary,
     },
   });

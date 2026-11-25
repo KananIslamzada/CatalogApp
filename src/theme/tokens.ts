@@ -29,6 +29,6 @@ export const typography: Record<TextVariant, TextStyle> = {
   heading: { fontSize: 18, lineHeight: 24, fontWeight: '600', letterSpacing: -0.2 },
   body: { fontSize: 16, lineHeight: 22, fontWeight: '400' },
   bodyStrong: { fontSize: 16, lineHeight: 22, fontWeight: '600' },
-  label: { fontSize: 14, lineHeight: 18, fontWeight: '500' },
-  caption: { fontSize: 12, lineHeight: 16, fontWeight: '400' },
+  label: { fontSize: 14, lineHeight: 18, fontWeight: '500', letterSpacing: -0.1 },
+  caption: { fontSize: 12, lineHeight: 16, fontWeight: '400', letterSpacing: 0.1 },
 };

@@ -6,5 +6,29 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "clearText": "Clear text"
+  },
+  "auth": {
+    "title": "Welcome back",
+    "subtitle": "Sign in to browse the catalog.",
+    "username": "Username",
+    "password": "Password",
+    "usernamePlaceholder": "emilys",
+    "passwordPlaceholder": "Your password",
+    "signIn": "Sign in",
+    "demoHint": "Demo account: emilys / emilyspass",
+    "usernameRequired": "Enter your username",
+    "passwordRequired": "Enter your password",
+    "invalidCredentials": "Wrong username or password",
+    "sessionExpired": "Your session expired. Please sign in again.",
+    "signOut": "Sign out"
+  },
+  "home": {
+    "greeting": "Hi, {name}"
+  },
+  "errors": {
+    "network": "No internet connection",
+    "timeout": "The server took too long to respond",
+    "server": "Something went wrong on our side",
+    "unknown": "Something went wrong"
   }
 }

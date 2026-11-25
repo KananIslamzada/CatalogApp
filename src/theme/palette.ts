@@ -10,6 +10,7 @@ export type Palette = {
   accent: string;
   accentPressed: string;
   accentSoft: string;
+  accentMuted: string;
   danger: string;
   dangerSoft: string;
   success: string;
@@ -31,6 +32,7 @@ export const lightPalette: Palette = {
   accent: '#6A4DF4',
   accentPressed: '#5638DE',
   accentSoft: '#ECE8FF',
+  accentMuted: '#C9C2E6',
   danger: '#D93A3F',
   dangerSoft: '#FDECEC',
   success: '#1F9D63',
@@ -52,6 +54,7 @@ export const darkPalette: Palette = {
   accent: '#9C86FF',
   accentPressed: '#8670F2',
   accentSoft: '#2A2440',
+  accentMuted: '#3A3550',
   danger: '#FF6B6F',
   dangerSoft: '#3A1E21',
   success: '#3DCB8A',

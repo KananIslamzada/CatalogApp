@@ -6,3 +6,12 @@ setUpTests();
 jest.mock('react-native-nitro-modules', () => ({
   NitroModules: { createHybridObject: jest.fn() },
 }));
+
+jest.mock('react-native-keyboard-controller', () =>
+  require('react-native-keyboard-controller/jest'),
+);
+
+jest.mock(
+  'react-native-safe-area-context',
+  () => require('react-native-safe-area-context/jest/mock').default,
+);

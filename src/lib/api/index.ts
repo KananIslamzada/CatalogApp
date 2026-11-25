@@ -15,3 +15,4 @@ export {
   type RequestOptions,
 } from './api-client';
 export { ApiError, isApiError, type ApiErrorKind } from './api-error';
+export { errorMessageKey } from './error-message';

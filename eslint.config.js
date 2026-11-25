@@ -26,6 +26,7 @@ module.exports = defineConfig([
     files: ['**/*.test.ts', '**/*.test.tsx', 'jest.setup.ts'],
     rules: {
       'no-console': 'off',
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
 ]);
