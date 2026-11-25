@@ -66,11 +66,7 @@ function AppDialogHost() {
         />
       </Animated.View>
       <View pointerEvents="box-none" style={styles.stage}>
-        <Animated.View
-          renderToHardwareTextureAndroid
-          accessibilityViewIsModal
-          style={[styles.cardWrapper, cardStyle]}
-        >
+        <Animated.View accessibilityViewIsModal style={[styles.cardWrapper, cardStyle]}>
           <GlassSurface style={styles.card}>
             <View style={styles.heading}>
               {dialog?.icon}

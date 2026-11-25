@@ -46,7 +46,6 @@ function IconButton({
 
   return (
     <AnimatedPressable
-      renderToHardwareTextureAndroid={!disabled}
       accessibilityRole="button"
       accessibilityState={{ disabled: !!disabled }}
       hitSlop={HIT_SLOP}

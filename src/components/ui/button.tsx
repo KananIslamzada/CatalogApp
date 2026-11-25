@@ -65,7 +65,6 @@ function Button({
 
   return (
     <AnimatedPressable
-      renderToHardwareTextureAndroid={!isDisabled}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel ?? title}
       accessibilityState={{ disabled: isDisabled, busy: loading || showSpinner }}

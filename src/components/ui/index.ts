@@ -3,6 +3,8 @@ export { default as Button, type ButtonProps } from './button';
 export { default as GlassSurface } from './glass-surface';
 export { default as IconButton, type IconButtonProps } from './icon-button';
 export { default as Screen } from './screen';
+export { default as ScrollEdgeBackdrop } from './scroll-edge-backdrop';
+export { default as SearchField } from './search-field';
 export { default as StateView } from './state-view';
 export { showToast, ToastHost, type ToastType } from './toast';
 export { default as Text, type TextProps } from './text';

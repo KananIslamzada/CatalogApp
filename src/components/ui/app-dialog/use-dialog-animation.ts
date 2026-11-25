@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from 'react';
+import { Platform } from 'react-native';
 import { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
 
@@ -8,6 +9,7 @@ import { type DialogOptions } from './dialog-store';
 
 const ENTER = { duration: 220, easing: easeOut };
 const EXIT = { duration: 160, easing: easeOut };
+const ENTER_SCALE = Platform.OS === 'ios' ? 0.96 : 1;
 
 export function useDialogAnimation(dialog: DialogOptions | null, onHidden: () => void) {
   const progress = useSharedValue(0);
@@ -30,7 +32,10 @@ export function useDialogAnimation(dialog: DialogOptions | null, onHidden: () =>
 
   const cardStyle = useAnimatedStyle(() => ({
     opacity: progress.get(),
-    transform: [{ scale: 0.96 + progress.get() * 0.04 }, { translateY: (1 - progress.get()) * 8 }],
+    transform: [
+      { scale: ENTER_SCALE + progress.get() * (1 - ENTER_SCALE) },
+      { translateY: (1 - progress.get()) * 8 },
+    ],
   }));
 
   return { hide, backdropStyle, cardStyle };

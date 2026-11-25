@@ -34,3 +34,10 @@ export function fetchProduct(id: number, signal?: AbortSignal): Promise<Product>
     signal,
   });
 }
+
+export function searchProducts(term: string, signal?: AbortSignal) {
+  return apiClient.request('/auth/products/search', productPageSchema, {
+    query: { q: term, limit: 0, select: PRODUCT_FIELDS },
+    signal,
+  });
+}

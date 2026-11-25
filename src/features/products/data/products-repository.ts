@@ -59,3 +59,12 @@ export async function readProduct(id: number): Promise<Product | null> {
   const row = await db.getFirstAsync<ProductRow>('SELECT * FROM products WHERE id = ?', [id]);
   return row ? rowToProduct(row) : null;
 }
+
+export async function searchCachedProducts(term: string): Promise<Product[]> {
+  const db = await getDatabase();
+  const rows = await db.getAllAsync<ProductRow>(
+    'SELECT * FROM products WHERE instr(lower(title), lower(?)) > 0 ORDER BY id',
+    [term],
+  );
+  return rows.map(rowToProduct);
+}

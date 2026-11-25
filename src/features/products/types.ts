@@ -36,3 +36,9 @@ export type ProductResult = {
   product: Product;
   source: DataSource;
 };
+
+export type SearchResult = {
+  term: string;
+  products: Product[];
+  source: DataSource;
+};

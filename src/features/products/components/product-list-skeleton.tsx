@@ -33,21 +33,22 @@ function ProductListSkeleton() {
     return () => cancelAnimation(progress);
   }, [progress, reduceMotion]);
 
-  const cardWidth = (width - GRID_PADDING * 2 - GRID_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
+  const contentWidth = width - GRID_PADDING * 2;
+  const cardWidth = (contentWidth - GRID_GAP * (GRID_COLUMNS - 1)) / GRID_COLUMNS;
   const cardHeight = cardWidth + INFO_HEIGHT;
   const height = ROWS * (cardHeight + GRID_GAP);
 
-  const start = useDerivedValue(() => vec(-width + progress.get() * width * 2, 0));
-  const end = useDerivedValue(() => vec(progress.get() * width * 2, 0));
+  const start = useDerivedValue(() => vec(-contentWidth + progress.get() * contentWidth * 2, 0));
+  const end = useDerivedValue(() => vec(progress.get() * contentWidth * 2, 0));
 
   const cards = Array.from({ length: ROWS * GRID_COLUMNS }, (_, index) => ({
-    x: GRID_PADDING + (index % GRID_COLUMNS) * (cardWidth + GRID_GAP),
+    x: (index % GRID_COLUMNS) * (cardWidth + GRID_GAP),
     y: Math.floor(index / GRID_COLUMNS) * (cardHeight + GRID_GAP),
   }));
 
   return (
     <Canvas
-      style={{ width, height }}
+      style={{ width: contentWidth, height }}
       accessible
       accessibilityRole="progressbar"
       accessibilityLabel={t('catalog.loading')}

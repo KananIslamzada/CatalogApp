@@ -1,8 +1,13 @@
 import { isApiError } from '@/lib/api';
 
-import { fetchProduct, fetchProducts } from './api/products-api';
-import { readProduct, readProductsPage, saveProducts } from './data/products-repository';
-import { type ProductPage, type ProductResult } from './types';
+import { fetchProduct, fetchProducts, searchProducts } from './api/products-api';
+import {
+  readProduct,
+  readProductsPage,
+  saveProducts,
+  searchCachedProducts,
+} from './data/products-repository';
+import { type Product, type ProductPage, type ProductResult, type SearchResult } from './types';
 
 export function canServeFromCache(error: unknown): boolean {
   if (!isApiError(error)) return false;
@@ -47,5 +52,21 @@ export async function loadProduct(id: number, signal?: AbortSignal): Promise<Pro
     const cached = await readProduct(id);
     if (!cached) throw error;
     return { product: cached, source: 'cache' };
+  }
+}
+
+export function matchesName(product: Product, term: string): boolean {
+  return product.title.toLowerCase().includes(term.toLowerCase());
+}
+
+export async function searchByName(term: string, signal?: AbortSignal): Promise<SearchResult> {
+  try {
+    const page = await searchProducts(term, signal);
+    await persist(saveProducts(page.products));
+    const products = page.products.filter((product) => matchesName(product, term));
+    return { term, products, source: 'network' };
+  } catch (error) {
+    if (!canServeFromCache(error)) throw error;
+    return { term, products: await searchCachedProducts(term), source: 'cache' };
   }
 }

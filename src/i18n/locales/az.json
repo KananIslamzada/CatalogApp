@@ -63,5 +63,12 @@
     "errorTitle": "Məhsulları yükləmək olmadı",
     "loadMoreFailed": "Daha çox yükləmək olmadı",
     "endOfList": "Hamısı budur"
+  },
+  "search": {
+    "label": "Məhsul axtar",
+    "placeholder": "Adla axtar",
+    "emptyTitle": "Nəticə yoxdur",
+    "emptyMessage": "“{term}” adlı məhsul yoxdur. Başqa ad yoxlayın.",
+    "errorTitle": "Axtarış alınmadı"
   }
 }
