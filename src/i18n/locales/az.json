@@ -5,7 +5,10 @@
     "back": "Geri qayıt",
     "showPassword": "Şifrəni göstər",
     "hidePassword": "Şifrəni gizlət",
-    "clearText": "Mətni təmizlə"
+    "clearText": "Mətni təmizlə",
+    "ok": "Oldu",
+    "close": "Bağla",
+    "goHome": "Kataloqa keç"
   },
   "auth": {
     "title": "Xoş gəlmisiniz",
@@ -19,8 +22,9 @@
     "usernameRequired": "İstifadəçi adını daxil edin",
     "passwordRequired": "Şifrəni daxil edin",
     "invalidCredentials": "İstifadəçi adı və ya şifrə yanlışdır",
-    "sessionExpired": "Sessiyanın vaxtı bitdi. Yenidən daxil olun.",
-    "signOut": "Çıxış"
+    "sessionExpired": "Davam etmək üçün yenidən daxil olun.",
+    "signOut": "Çıxış",
+    "sessionExpiredTitle": "Sessiyanın vaxtı bitdi"
   },
   "home": {
     "greeting": "Salam, {name}"
@@ -35,5 +39,15 @@
     "title": "Məhsul #{id}",
     "notFound": "Məhsul tapılmadı",
     "notFoundMessage": "Bu keçid heç bir məhsula aparmır."
+  },
+  "links": {
+    "unsupportedTitle": "Keçid dəstəklənmir",
+    "unsupportedMessage": "Bu keçidi Kataloqda açmaq mümkün deyil.",
+    "invalidProductTitle": "Məhsul keçidi səhvdir",
+    "invalidProductMessage": "Keçidi yoxlayıb yenidən cəhd edin."
+  },
+  "notFound": {
+    "title": "Səhifə tapılmadı",
+    "message": "Belə səhifə yoxdur."
   }
 }

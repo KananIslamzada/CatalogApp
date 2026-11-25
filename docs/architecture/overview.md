@@ -14,6 +14,7 @@ Catalog: a signed-in user browses the DummyJSON product catalogue, searches it, 
 | Key-value      | `react-native-mmkv`                                                                           | Synchronous, fast storage for non-sensitive prefs (e.g. locale override).                                                                                         |
 | Secrets        | `expo-secure-store`                                                                           | Access/refresh tokens live in Keychain / Keystore only.                                                                                                           |
 | HTTP           | `fetch` + small client in `lib/api`                                                           | No extra dependency; refresh, timeout and zod validation are a few dozen lines and fully tested.                                                                  |
+| Toasts         | `react-native-toast-message`                                                                  | Same toast stack as our other apps; custom themed card.                                                                                                           |
 | Network status | `expo-network`                                                                                | Feeds React Query's `onlineManager` and the offline banner.                                                                                                       |
 | Forms          | `react-hook-form` + `zod`                                                                     | Uncontrolled inputs (no re-render per keystroke), schema gives typed values and messages.                                                                         |
 | Lists          | `@shopify/flash-list` v2                                                                      | Cell recycling, smooth on mid-range Android in release builds.                                                                                                    |
@@ -65,3 +66,4 @@ Screens never call `fetch` or SQLite directly.
 - [networking.md](networking.md): API client, token refresh, errors.
 - [auth.md](auth.md): session, login, logout, guards.
 - [deep-links.md](deep-links.md): `catalog://product/<id>` with login-first handling.
+- [products-data.md](products-data.md): product fetching, SQLite cache and offline fallback.

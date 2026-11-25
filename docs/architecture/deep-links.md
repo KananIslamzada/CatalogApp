@@ -2,6 +2,17 @@
 
 Scheme `catalog` (`app.json`). Supported link: `catalog://product/<id>`.
 
+Every incoming URL is classified by `parseDeepLink`:
+
+| Kind              | Examples                                            | Result                                                |
+| ----------------- | --------------------------------------------------- | ----------------------------------------------------- |
+| `passthrough`     | `catalog://`, `catalog://login`                     | normal routing                                        |
+| `product`         | `catalog://product/42`, `/product/42/`, `?ref=…`    | parked, opened after sign-in (below)                  |
+| `invalid-product` | `catalog://product/abc`, `/0`, `/-3`, `/42/reviews` | popup "Product link is broken", app stays where it is |
+| `unknown`         | `catalog://settings`, `catalog://products/42`       | popup "Link not supported", app stays where it is     |
+
+The popups use the shared `AppDialog` (works before the navigator or the dialog host is mounted, because requests sit in a store). `app/+not-found.tsx` is a safety net for any other unmatched route (e.g. a stale in-app link) with a "Go to catalog" action. Universal links (`https://…`) are not configured, so they are treated as unknown.
+
 ## How it works
 
 | File                                                 | Role                                                                                                                                                           |
@@ -39,10 +50,14 @@ The pending id is only kept in memory: if the app is killed before the user sign
 
 ## Testing
 
-- Unit: parser cases, `redirectSystemPath` (cold vs warm, pass-through), `usePendingLinkNavigation` (pending before sign in, arriving while signed in, opened only once).
+- Unit: every parser kind, `redirectSystemPath` (cold vs warm, pass-through, broken and unknown links raise the popup), `usePendingLinkNavigation` (pending before sign in, arriving while signed in, opened only once).
 - Manual (verified on an Android emulator: signed out warm and cold, signed in warm and cold, back navigation):
 
 ```bash
 xcrun simctl openurl booted "catalog://product/42"
 adb shell am start -W -a android.intent.action.VIEW -d "catalog://product/42" com.catalogapp.mobile
 ```
+
+## Dev-only warnings on Android activity recreation
+
+Changing the system font or display size recreates the Android activity (that is what makes React Native re-measure text). For a moment the old root is still mounted while the new one starts, so React Navigation logs "configured linking in multiple places" / "multiple navigation containers consuming the shared imperative routing queue". The app has a single container (expo-router's) and deep links keep working right after recreation (verified on an emulator), so both messages are filtered in `LogBox` in `app/_layout.tsx`. Keeping the activity alive with `configChanges="fontScale"` was tried and rejected: text then stays at the old size until restart.

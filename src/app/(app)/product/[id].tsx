@@ -4,7 +4,7 @@ import { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { IconButton, Screen, StateView, Text } from '@/components/ui';
-import { parseProductLink } from '@/features/deep-links';
+import { parseProductId } from '@/features/deep-links';
 import { useTranslation } from '@/i18n';
 import { spacing, useScaledSize, useTheme } from '@/theme';
 
@@ -13,7 +13,7 @@ export default function ProductScreen() {
   const { colors } = useTheme();
   const iconSize = useScaledSize(24);
   const { id } = useLocalSearchParams<{ id: string }>();
-  const productId = parseProductLink(`/product/${id}`);
+  const productId = parseProductId(id);
 
   const goBack = useCallback(() => {
     if (router.canGoBack()) router.back();

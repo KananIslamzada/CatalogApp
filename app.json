@@ -34,14 +34,8 @@
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": [
-              "en",
-              "az"
-            ],
-            "android": [
-              "en",
-              "az"
-            ]
+            "ios": ["en", "az"],
+            "android": ["en", "az"]
           }
         }
       ],

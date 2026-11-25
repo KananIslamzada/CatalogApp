@@ -5,7 +5,7 @@
 - `palette.ts` holds a light and a dark `Palette`. `useTheme()` picks one from the system `useColorScheme()`, so dark mode follows the OS with no in-app toggle.
 - `tokens.ts` holds `spacing`, `radius`, `typography` (semantic variants: `display`, `title`, `heading`, `body`, `bodyStrong`, `label`, `caption`) and `MAX_FONT_SCALE`.
 - Styles that depend on colours are built with `useThemedStyles(createStyles)`, where `createStyles` is a module-level `(theme) => StyleSheet.create(...)`. It is memoised per theme, so styles are created once per scheme change.
-- The root layout sets the system UI background and the status bar style from the active theme.
+- The root layout sets the system UI background and the status bar style from the active theme, and wraps the stack in expo-router's `ThemeProvider` with a navigation theme built from the palette (`theme/navigation-theme.ts`). Without it the navigator's default light theme shows white behind screens during transitions in dark mode. The navigation theme is imported directly, not through the `@/theme` barrel, so UI components and their tests don't pull in expo-router.
 
 ## Primitives (`src/components/ui/`)
 
@@ -17,14 +17,16 @@
 | `TextField`        | Label, animated focus/error border, error text announced as an alert, password visibility toggle.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `Screen`           | Safe-area container with the theme background.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `GlassSurface`     | Liquid Glass container with a solid fallback.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `AppDialog`        | Global popup ported from vyra: `showAppDialog({ title, message, icon, tone, actions, dismissible })` from anywhere (stores, link handlers, before the host mounts). `AppDialogHost` is mounted once in the root layout. Dialogs queue and show one at a time; an action runs only after the close animation; backdrop tap / Android back dismiss unless `dismissible: false`. Glass card, 220 ms in / 160 ms out ease-out, no springs.                                                                                                                                                                                                |
+| Toast              | Ported from vyra (`react-native-toast-message` + custom card with a coloured accent stripe): `showToast({ type, title, message })`, types `success` / `info` / `warning` / `error`. `ToastHost` is mounted once in the root layout and offsets itself below the safe area. Text wraps instead of shrinking (vyra's `adjustsFontSizeToFit` would fight Dynamic Type).                                                                                                                                                                                                                                                                  |
 | `StateView`        | Shared loading / empty / error layout with an optional action (used for retry).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `usePressFeedback` | Shared press feedback for both buttons: scale 0.97 (90 ms in / 160 ms out, ease-out), resets when the button becomes disabled mid-press, and animates the dimmed opacity instead of snapping. Loading keeps full colour.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `usePressFeedback` | Same press feel as vyra's `BasePress`: scale to 0.996 with a spring (damping 15, stiffness 400; the movement is too small to visibly bounce) plus an opacity dip to 0.8 (80 ms in / 150 ms out). Resets when the button becomes disabled mid-press; dimming (0.5) is animated separately and multiplied in. Not used on glass, which has its own native press effect.                                                                                                                                                                                                                                                                 |
 
 ## Design principles
 
 Follows Apple's interface guidance (HIG, WWDC "Designing Fluid Interfaces", "The Details of UI Typography"):
 
-- **Response:** feedback starts on touch-down (press scale or native glass response), never on release.
+- **Response:** feedback starts on touch-down (opacity dip + tiny scale, or the native glass response), never on release.
 - **Calm motion:** short ease-out timings with no overshoot; everything animates from its current value, so it can be interrupted.
 - **Spatial consistency:** things leave the way they came (e.g. the login banner enters downward and exits upward).
 - **No layout jumps:** appearing content fades, and its siblings move with `layoutTransition`.
@@ -34,6 +36,19 @@ Follows Apple's interface guidance (HIG, WWDC "Designing Fluid Interfaces", "The
 - **Android text under transforms:** pressable surfaces set `renderToHardwareTextureAndroid` while enabled, so the press scale animates a GPU texture instead of re-laying out text every frame (no glyph jitter). Turned off while loading/disabled so the spinner and tint still animate.
 - **Font scaling:** `Text` sets `includeFontPadding: false` (Android centres text without extra padding); `TextField` inputs have no fixed `lineHeight` (Android clips it); button labels can shrink and wrap; icons follow the font scale up to 1.5× via `useScaledSize`. Verified on an Android emulator at font scale 2.0.
 - **Accessibility settings:** Reanimated animations follow the system Reduce Motion setting by default; Reduce Transparency turns all glass solid (`useGlassEnabled`).
+
+## Global errors
+
+`lib/query-client.ts` reports errors once, globally, through the toast:
+
+- **Queries:** only when the query already has data on screen (a background refresh failed). A failed first load is left to the screen's inline error state with retry, so nothing is reported twice.
+- **Mutations:** every failure.
+- **Silent:** `unauthorized` (the session-expired popup handles it) and `aborted`.
+- Messages come from `errorMessageKey` (translated). Popups (`showAppDialog`) are for things that need a decision or explanation; toasts are for transient failures.
+
+## Keyboard
+
+Forms use `react-native-keyboard-controller` (`KeyboardProvider` in `AppProviders`). Screens with inputs wrap their content in `KeyboardAwareScrollView` with a small `bottomOffset` (`spacing.md`), which scrolls the focused field just above the keyboard. Put the bottom safe-area inset **inside** the scroll content, not as padding around the scroll view; otherwise the scroll view misjudges where the keyboard starts by the home-indicator height.
 
 ## Native feel: Liquid Glass
 
@@ -69,3 +84,4 @@ Rules:
 - Jest uses `react-native-reanimated/jest/resolver` and `setUpTests()` from Reanimated in `jest.setup.ts`.
 - `lucide-react-native` is mapped to its CommonJS build in Jest (`moduleNameMapper`).
 - Testing Library v14 is async: `await render(...)`, `await fireEvent.press(...)`.
+- Hook tests that need React Query use `createTestQueryClient()` / `createQueryWrapper(client)` from `src/test-utils/query-client.tsx` and call `client.clear()` in `afterEach`. It sets `gcTime: Infinity`: the default 5-minute garbage-collection timer otherwise keeps the Jest worker alive ("A worker process has failed to exit gracefully").

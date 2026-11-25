@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
 
 import { login } from '@/features/auth/api/auth-api';
+import { AppDialogHost } from '@/components/ui';
+import { useDialogStore } from '@/components/ui/app-dialog/dialog-store';
 import { useSessionStore } from '@/features/auth';
 import { ApiError } from '@/lib/api';
 
@@ -80,10 +82,19 @@ describe('LoginScreen', () => {
     expect(await screen.findByText('No internet connection')).toBeOnTheScreen();
   });
 
-  it('explains why the user was signed out after the session expired', async () => {
+  it('explains in a popup why the user was signed out after the session expired', async () => {
+    useDialogStore.setState({ current: null, queue: [] });
     useSessionStore.setState({ expired: true });
-    await render(<LoginScreen />);
 
-    expect(screen.getByText('Your session expired. Please sign in again.')).toBeOnTheScreen();
+    await render(
+      <>
+        <LoginScreen />
+        <AppDialogHost />
+      </>,
+    );
+
+    expect(await screen.findByText('Session expired')).toBeOnTheScreen();
+    expect(screen.getByText('Please sign in again to continue.')).toBeOnTheScreen();
+    expect(useSessionStore.getState().expired).toBe(false);
   });
 });
