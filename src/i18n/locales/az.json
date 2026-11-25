@@ -30,5 +30,10 @@
     "timeout": "Server çox gec cavab verdi",
     "server": "Bizim tərəfdə xəta baş verdi",
     "unknown": "Xəta baş verdi"
+  },
+  "product": {
+    "title": "Məhsul #{id}",
+    "notFound": "Məhsul tapılmadı",
+    "notFoundMessage": "Bu keçid heç bir məhsula aparmır."
   }
 }

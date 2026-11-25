@@ -64,3 +64,4 @@ Screens never call `fetch` or SQLite directly.
 - [storage.md](storage.md): secure tokens, MMKV, SQLite schema and migrations.
 - [networking.md](networking.md): API client, token refresh, errors.
 - [auth.md](auth.md): session, login, logout, guards.
+- [deep-links.md](deep-links.md): `catalog://product/<id>` with login-first handling.

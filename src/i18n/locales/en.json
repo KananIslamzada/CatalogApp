@@ -30,5 +30,10 @@
     "timeout": "The server took too long to respond",
     "server": "Something went wrong on our side",
     "unknown": "Something went wrong"
+  },
+  "product": {
+    "title": "Product #{id}",
+    "notFound": "Product not found",
+    "notFoundMessage": "This link doesn't point to a product."
   }
 }
