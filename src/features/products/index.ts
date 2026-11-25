@@ -1,6 +1,12 @@
 export { default as CatalogHeader } from './components/catalog-header';
+export { default as CatalogTopBar } from './components/catalog-top-bar';
 export { default as ProductList } from './components/product-list';
 export { productKeys } from './hooks/query-keys';
+export { useCatalogSearch } from './hooks/use-catalog-search';
+export { useCollapsingHeader } from './hooks/use-collapsing-header';
+export { useScrollToResults } from './hooks/use-scroll-to-results';
+export { useSearchRowHeight } from './hooks/use-search-row-height';
 export { useProductQuery } from './hooks/use-product-query';
+export { useProductSearchQuery } from './hooks/use-product-search-query';
 export { PAGE_SIZE, useProductsQuery } from './hooks/use-products-query';
 export { type DataSource, type Product, type ProductPage } from './types';

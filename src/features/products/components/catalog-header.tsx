@@ -1,24 +1,31 @@
-import { LogOut } from 'lucide-react-native';
 import { memo } from 'react';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  type LayoutChangeEvent,
+  type StyleProp,
+  type ViewStyle,
+} from 'react-native';
+import Animated, { type AnimatedStyle } from 'react-native-reanimated';
 
-import { IconButton, Text } from '@/components/ui';
-import { useConfirmSignOut, useSessionStore } from '@/features/auth';
+import { Text } from '@/components/ui';
+import { useSessionStore } from '@/features/auth';
 import { useTranslation } from '@/i18n';
-import { spacing, useScaledSize, useTheme } from '@/theme';
+import { spacing } from '@/theme';
 
-import { GRID_PADDING } from './layout';
+type CatalogHeaderProps = {
+  searchSpace: number;
+  largeTitleStyle: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>;
+  onTitleLayout: (event: LayoutChangeEvent) => void;
+};
 
-function CatalogHeader() {
+function CatalogHeader({ searchSpace, largeTitleStyle, onTitleLayout }: CatalogHeaderProps) {
   const { t } = useTranslation();
-  const { colors } = useTheme();
-  const iconSize = useScaledSize(20);
   const firstName = useSessionStore((state) => state.user?.firstName ?? '');
-  const { confirmSignOut, isSigningOut } = useConfirmSignOut();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titles}>
+    <View>
+      <Animated.View onLayout={onTitleLayout} style={[styles.titles, largeTitleStyle]}>
         <Text variant="display" accessibilityRole="header" numberOfLines={1}>
           {t('catalog.title')}
         </Text>
@@ -27,37 +34,17 @@ function CatalogHeader() {
             {t('home.greeting', { name: firstName })}
           </Text>
         )}
-      </View>
-      <IconButton
-        filled
-        accessibilityLabel={t('auth.signOut')}
-        disabled={isSigningOut}
-        onPress={confirmSignOut}
-        icon={
-          isSigningOut ? (
-            <ActivityIndicator color={colors.accent} />
-          ) : (
-            <LogOut size={iconSize} color={colors.textPrimary} />
-          )
-        }
-        testID="sign-out"
-      />
+      </Animated.View>
+      <View style={{ height: searchSpace }} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    paddingHorizontal: GRID_PADDING,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.lg,
-  },
   titles: {
-    flex: 1,
     gap: spacing.xxs,
+    paddingBottom: spacing.md,
+    transformOrigin: 'left',
   },
 });
 

@@ -63,5 +63,12 @@
     "errorTitle": "Couldn't load products",
     "loadMoreFailed": "Couldn't load more",
     "endOfList": "That's everything"
+  },
+  "search": {
+    "label": "Search products",
+    "placeholder": "Search by name",
+    "emptyTitle": "No matches",
+    "emptyMessage": "Nothing named “{term}”. Try another name.",
+    "errorTitle": "Search failed"
   }
 }
