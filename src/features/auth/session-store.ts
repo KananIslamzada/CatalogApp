@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { apiClient } from '@/lib/api';
+import { errorReporter } from '@/lib/error-reporting';
 import { readJson, writeJson } from '@/lib/kv-storage';
 import { queryClient } from '@/lib/query-client';
 
@@ -37,8 +38,8 @@ export const useSessionStore = create<SessionState>()((set) => ({
         return;
       }
       if (tokens) await apiClient.clearTokens();
-    } catch {
-      console.warn('Could not restore the session');
+    } catch (error) {
+      errorReporter.captureException(error, { area: 'session-restore' });
     }
     set({ status: 'signedOut', user: null });
   },
@@ -68,3 +69,8 @@ export const useSessionStore = create<SessionState>()((set) => ({
 }));
 
 apiClient.setSessionExpiredHandler(() => useSessionStore.getState().expire());
+
+useSessionStore.subscribe((state, previous) => {
+  if (state.user?.id === previous.user?.id) return;
+  errorReporter.setUser(state.user ? { id: state.user.id } : null);
+});

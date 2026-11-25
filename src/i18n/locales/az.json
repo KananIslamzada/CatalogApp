@@ -36,7 +36,9 @@
     "network": "İnternet bağlantısı yoxdur",
     "timeout": "Server çox gec cavab verdi",
     "server": "Bizim tərəfdə xəta baş verdi",
-    "unknown": "Xəta baş verdi"
+    "unknown": "Xəta baş verdi",
+    "crashTitle": "Xəta baş verdi",
+    "crashMessage": "Tətbiqdə gözlənilməz problem yarandı. Yenidən cəhd edin, təkrarlanarsa tətbiqi yenidən başladın."
   },
   "product": {
     "notFound": "Məhsul tapılmadı",
