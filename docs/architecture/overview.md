@@ -59,3 +59,4 @@ Screens never call `fetch` or SQLite directly.
 ## Module docs
 
 - [ui-theming-i18n.md](ui-theming-i18n.md): theme, UI primitives, translations, Jest setup.
+- [storage.md](storage.md): secure tokens, MMKV, SQLite schema and migrations.
