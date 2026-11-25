@@ -20,6 +20,15 @@ npm run ios
 npm run android
 ```
 
+## Deep links
+
+```bash
+xcrun simctl openurl booted "catalog://product/42"
+adb shell am start -W -a android.intent.action.VIEW -d "catalog://product/42" com.catalogapp.mobile
+```
+
+When signed out, the app shows the login screen first and opens the product right after signing in.
+
 ## Quality gates
 
 ```bash
