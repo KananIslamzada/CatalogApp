@@ -1,7 +1,7 @@
 import { MutationCache, QueryCache, QueryClient } from '@tanstack/react-query';
 
 import { showToast } from '@/components/ui/toast/show-toast';
-import { t } from '@/i18n';
+import { t, type TranslationKey } from '@/i18n';
 
 import { errorMessageKey, isApiError } from './api';
 
@@ -18,9 +18,15 @@ export function isSilentError(error: unknown): boolean {
   return isApiError(error) && (error.kind === 'unauthorized' || error.kind === 'aborted');
 }
 
-export function reportError(error: unknown): void {
+export function reportError(error: unknown, messageKey?: TranslationKey): void {
   if (isSilentError(error)) return;
-  showToast({ type: 'error', title: t(errorMessageKey(error)) });
+  showToast({ type: 'error', title: t(messageKey ?? errorMessageKey(error)) });
+}
+
+declare module '@tanstack/react-query' {
+  interface Register {
+    mutationMeta: { errorKey?: TranslationKey };
+  }
 }
 
 export const queryClient = new QueryClient({
@@ -30,7 +36,7 @@ export const queryClient = new QueryClient({
     },
   }),
   mutationCache: new MutationCache({
-    onError: reportError,
+    onError: (error, _variables, _context, mutation) => reportError(error, mutation.meta?.errorKey),
   }),
   defaultOptions: {
     queries: {

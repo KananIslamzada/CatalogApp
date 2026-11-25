@@ -80,5 +80,14 @@
     "emptyTitle": "Nəticə yoxdur",
     "emptyMessage": "“{term}” adlı məhsul yoxdur. Başqa ad yoxlayın.",
     "errorTitle": "Axtarış alınmadı"
+  },
+  "favourites": {
+    "title": "Seçilmişlər",
+    "open": "Seçilmişlər",
+    "add": "Seçilmişlərə əlavə et",
+    "remove": "Seçilmişlərdən çıxar",
+    "emptyTitle": "Hələ seçilmiş yoxdur",
+    "emptyMessage": "Məhsulu burada saxlamaq üçün ürəyə toxunun. Seçilmişlər oflayn da işləyir.",
+    "saveFailed": "Seçilmişləri yeniləmək alınmadı"
   }
 }

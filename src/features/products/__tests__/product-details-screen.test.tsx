@@ -13,6 +13,11 @@ import { type ProductPage } from '../types';
 import { makeProduct } from '../__fixtures__/products';
 
 jest.mock('../products-service', () => ({ loadProduct: jest.fn() }));
+jest.mock('../data/favourites-repository', () => ({
+  readFavourites: jest.fn(async () => []),
+  addFavourite: jest.fn(async () => undefined),
+  removeFavourite: jest.fn(async () => undefined),
+}));
 
 const mockedLoad = jest.mocked(loadProduct);
 

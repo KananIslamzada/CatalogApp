@@ -36,6 +36,7 @@ function IconButton({
   filled = false,
   style,
   disabled,
+  accessibilityState,
   ...rest
 }: IconButtonProps) {
   const { scheme } = useTheme();
@@ -47,7 +48,7 @@ function IconButton({
   return (
     <AnimatedPressable
       accessibilityRole="button"
-      accessibilityState={{ disabled: !!disabled }}
+      accessibilityState={{ ...accessibilityState, disabled: !!disabled }}
       hitSlop={HIT_SLOP}
       disabled={disabled}
       onPressIn={isGlass ? undefined : onPressIn}

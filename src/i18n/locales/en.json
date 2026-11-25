@@ -80,5 +80,14 @@
     "emptyTitle": "No matches",
     "emptyMessage": "Nothing named “{term}”. Try another name.",
     "errorTitle": "Search failed"
+  },
+  "favourites": {
+    "title": "Favourites",
+    "open": "Favourites",
+    "add": "Add to favourites",
+    "remove": "Remove from favourites",
+    "emptyTitle": "No favourites yet",
+    "emptyMessage": "Tap the heart on a product to keep it here. Favourites work offline too.",
+    "saveFailed": "Couldn't update favourites"
   }
 }

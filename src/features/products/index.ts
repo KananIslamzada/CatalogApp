@@ -1,5 +1,6 @@
 export { default as CatalogHeader } from './components/catalog-header';
 export { default as CatalogTopBar } from './components/catalog-top-bar';
+export { default as FavouritesScreen } from './components/favourites-screen';
 export { default as ProductDetailsScreen } from './components/product-details-screen';
 export { default as ProductList } from './components/product-list';
 export { productKeys } from './hooks/query-keys';

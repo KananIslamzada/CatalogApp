@@ -14,6 +14,7 @@ import { useProductQuery } from '../hooks/use-product-query';
 import ImageViewer from './image-viewer';
 import { TOP_BAR_HEIGHT } from './layout';
 import ProductDetailsSkeleton from './product-details-skeleton';
+import ProductFavouriteButton from './product-favourite-button';
 import ProductGallery from './product-gallery';
 import ProductInfo from './product-info';
 import ProductTopBar from './product-top-bar';
@@ -104,7 +105,12 @@ function ProductDetails({ id }: { id: number }) {
           <ProductInfo product={product} />
         </Animated.View>
       </Animated.ScrollView>
-      <ProductTopBar title={product.title} backdropStyle={backdropStyle} titleStyle={titleStyle} />
+      <ProductTopBar
+        title={product.title}
+        backdropStyle={backdropStyle}
+        titleStyle={titleStyle}
+        accessory={<ProductFavouriteButton product={product} />}
+      />
       {viewer && (
         <ImageViewer
           title={product.title}

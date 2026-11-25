@@ -1,6 +1,6 @@
-import { router } from 'expo-router';
 import { useCallback, useState } from 'react';
 
+import { useOpenProduct } from './use-open-product';
 import { useProductSearchQuery } from './use-product-search-query';
 import { useProductsQuery } from './use-products-query';
 
@@ -32,9 +32,7 @@ export function useProductList(term: string) {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  const openProduct = useCallback((id: number) => {
-    router.push({ pathname: '/product/[id]', params: { id: String(id) } });
-  }, []);
+  const openProduct = useOpenProduct();
 
   const shared = { isRefreshing, onRefresh, onEndReached, retryNextPage, openProduct };
 

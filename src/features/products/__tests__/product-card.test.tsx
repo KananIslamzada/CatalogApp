@@ -1,11 +1,19 @@
-import { fireEvent, render, screen } from '@testing-library/react-native';
+import { fireEvent, screen } from '@testing-library/react-native';
+
+import { renderWithQueryClient } from '@/test-utils/query-client';
 
 import { makeProduct } from '../__fixtures__/products';
 import ProductCard from '../components/product-card';
 
+jest.mock('../data/favourites-repository', () => ({
+  readFavourites: jest.fn(async () => []),
+  addFavourite: jest.fn(async () => undefined),
+  removeFavourite: jest.fn(async () => undefined),
+}));
+
 describe('ProductCard', () => {
   it('shows the product and describes it for screen readers', async () => {
-    await render(
+    await renderWithQueryClient(
       <ProductCard
         product={makeProduct(1, { title: 'Red Lipstick', price: 12.99, rating: 4.36 })}
         onPress={jest.fn()}
@@ -20,7 +28,7 @@ describe('ProductCard', () => {
   });
 
   it('falls back to the category when there is no brand', async () => {
-    await render(
+    await renderWithQueryClient(
       <ProductCard
         product={makeProduct(2, { brand: undefined, category: 'groceries' })}
         onPress={jest.fn()}
@@ -31,7 +39,7 @@ describe('ProductCard', () => {
   });
 
   it('shows the discount badge only when there is a discount', async () => {
-    const { rerender } = await render(
+    const { rerender } = await renderWithQueryClient(
       <ProductCard product={makeProduct(3, { discountPercentage: 18.19 })} onPress={jest.fn()} />,
     );
     expect(screen.getByText('-18%')).toBeOnTheScreen();
@@ -44,7 +52,7 @@ describe('ProductCard', () => {
 
   it('reports which product was tapped', async () => {
     const onPress = jest.fn();
-    await render(<ProductCard product={makeProduct(42)} onPress={onPress} />);
+    await renderWithQueryClient(<ProductCard product={makeProduct(42)} onPress={onPress} />);
 
     await fireEvent.press(screen.getByTestId('product-card-42'));
 
