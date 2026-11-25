@@ -9,10 +9,14 @@ import AppProviders from '@/components/app-providers';
 import OfflineBanner from '@/components/offline-banner';
 import { AppDialogHost, ToastHost } from '@/components/ui';
 import { useSessionBootstrap } from '@/features/auth';
+import { installGlobalErrorHandler } from '@/lib/error-reporting';
 import { useTheme } from '@/theme';
 import { useNavigationTheme } from '@/theme/navigation-theme';
 
+export { default as ErrorBoundary } from '@/components/app-error-boundary';
+
 SplashScreen.preventAutoHideAsync();
+installGlobalErrorHandler();
 
 LogBox.ignoreLogs([
   'Sending `onAnimatedValueUpdate` with no listeners registered',

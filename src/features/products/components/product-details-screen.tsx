@@ -85,34 +85,40 @@ function ProductDetails({ id, source }: { id: number; source: ProductSource | nu
 
   return (
     <>
-      <Animated.ScrollView
-        onScroll={onScroll}
-        scrollEventThrottle={16}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: bottom + spacing.xl }}
+      <View
+        style={styles.root}
+        importantForAccessibility={viewer ? 'no-hide-descendants' : 'auto'}
+        accessibilityElementsHidden={!!viewer}
       >
-        <Animated.View entering={revealOnLoad ? fadeIn : undefined}>
-          <ProductGallery
-            productId={product.id}
-            source={source}
-            title={product.title}
-            thumbnail={product.thumbnail}
-            pages={pages}
-            size={width}
-            index={galleryIndex}
-            onIndexChange={setGalleryIndex}
-            onOpen={openViewer}
-            stretchStyle={galleryStyle}
-          />
-          <ProductInfo product={product} />
-        </Animated.View>
-      </Animated.ScrollView>
-      <ProductTopBar
-        title={product.title}
-        backdropStyle={backdropStyle}
-        titleStyle={titleStyle}
-        accessory={<ProductFavouriteButton product={product} />}
-      />
+        <Animated.ScrollView
+          onScroll={onScroll}
+          scrollEventThrottle={16}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: bottom + spacing.xl }}
+        >
+          <Animated.View entering={revealOnLoad ? fadeIn : undefined}>
+            <ProductGallery
+              productId={product.id}
+              source={source}
+              title={product.title}
+              thumbnail={product.thumbnail}
+              pages={pages}
+              size={width}
+              index={galleryIndex}
+              onIndexChange={setGalleryIndex}
+              onOpen={openViewer}
+              stretchStyle={galleryStyle}
+            />
+            <ProductInfo product={product} />
+          </Animated.View>
+        </Animated.ScrollView>
+        <ProductTopBar
+          title={product.title}
+          backdropStyle={backdropStyle}
+          titleStyle={titleStyle}
+          accessory={<ProductFavouriteButton product={product} />}
+        />
+      </View>
       {viewer && (
         <ImageViewer
           title={product.title}

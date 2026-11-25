@@ -1,4 +1,5 @@
 import { isApiError } from '@/lib/api';
+import { errorReporter } from '@/lib/error-reporting';
 
 import { fetchProduct, fetchProducts, searchProducts } from './api/products-api';
 import {
@@ -19,7 +20,7 @@ async function persist(task: Promise<void>) {
   try {
     await task;
   } catch (error) {
-    console.warn('Could not cache products', error);
+    errorReporter.captureException(error, { area: 'products-cache' });
   }
 }
 

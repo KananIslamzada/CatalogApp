@@ -36,7 +36,9 @@
     "network": "No internet connection",
     "timeout": "The server took too long to respond",
     "server": "Something went wrong on our side",
-    "unknown": "Something went wrong"
+    "unknown": "Something went wrong",
+    "crashTitle": "Something went wrong",
+    "crashMessage": "The app ran into an unexpected problem. Try again, and if it keeps happening, restart the app."
   },
   "product": {
     "notFound": "Product not found",
