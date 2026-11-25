@@ -21,7 +21,6 @@ They live outside `src/app` on purpose: expo-router turns every file under `app/
 - `test-utils/query-client.tsx`: `createTestQueryClient` (`retry: false`, `gcTime: Infinity` so no timer keeps Jest alive), `createQueryWrapper`, `renderWithQueryClient`.
 - `features/products/__fixtures__/`: `makeProduct`, `createClientWithFavourites` (favourites already in the cache, so cards don't update after the test ends and trigger act warnings).
 - `jest.setup.ts`: Reanimated `setUpTests`, FlashList and Gesture Handler setups, stubs for Nitro (MMKV), keyboard-controller, safe-area, worklets' `getUIRuntimeHolder` (Gesture Handler 3) and `expo-network`'s listener.
-- Skia has no Jest build: tests that render the list mock `product-list-skeleton`.
 
 ## Maestro
 

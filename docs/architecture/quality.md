@@ -51,7 +51,7 @@ Maestro is not in CI: it needs a built app on an emulator (an EAS build + Maestr
 - Headings: screen titles, product title, "About this product", dialog titles and state views use `accessibilityRole="header"`.
 - Touch targets ≥ 44 pt (icon buttons 44 pt + 8 pt hit slop; the card heart is 34 pt + 8 pt slop = 50 pt).
 - Dynamic Type / font scale up to 2× (`MAX_FONT_SCALE`), icons scale with `useScaledSize` (capped at 1.5×), nothing clips at 2× on Android.
-- Reduce Motion: Reanimated timing animations and layout animations follow the system setting, the shared image transition is skipped, the Skia shimmer is static.
+- Reduce Motion: Reanimated timing animations and layout animations follow the system setting, the shared image transition is skipped, the skeleton shimmer is static.
 - Live updates: the offline pill announces "You're offline" / "Back online"; toasts use the alert role.
 - Overlays: the image viewer is modal for VoiceOver (`accessibilityViewIsModal`) and hides the details screen from TalkBack (`importantForAccessibility="no-hide-descendants"`) while open.
 - The catalog's floating header covers the full screen with `box-none`, so the search field has real bounds for TalkBack (see products-data.md).
@@ -59,3 +59,17 @@ Maestro is not in CI: it needs a built app on an emulator (an EAS build + Maestr
 ## Secrets in the bundle
 
 The login screen's demo-account hint is rendered only under `__DEV__`, and the credentials are passed as parameters there (the translation is `Demo account: {username} / {password}`), so the release bundle does not contain the password (checked with `npx expo export --platform android` and a search of the Hermes bundle).
+
+## Release build (Android)
+
+`expo-build-properties` in `app.json` (applied by `npx expo prebuild`; `android/` is generated, never edited by hand):
+
+| Option                                 | Value                 | Why                                                                                                                                                          |
+| -------------------------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `enableMinifyInReleaseBuilds`          | `true`                | R8 removes unused Java/Kotlin code (`classes.dex` ≈ 6 MB).                                                                                                   |
+| `enableShrinkResourcesInReleaseBuilds` | `true`                | Removes unused Android resources; needs R8.                                                                                                                  |
+| `buildArchs`                           | `arm64-v8a`, `x86_64` | Drops the 32-bit ABIs. arm64 covers modern phones and Apple Silicon emulators, x86_64 covers Intel emulators. Expo has no per-ABI APK split, only this list. |
+
+R8 safety: Reanimated, Worklets, Screens, expo-image and react-native-svg ship consumer ProGuard rules, `expo-modules-core` keeps every Expo module, React Native keeps `@DoNotStrip` classes, and MMKV's Nitro bindings are annotated `@Keep` / `@DoNotStrip`. Verified by building with `npx expo run:android --variant release` and running the full Maestro suite against the release app: 6/6 flows passed, no `ClassNotFoundException` / `NoSuchMethodError` in logcat.
+
+Size: native libraries are stored uncompressed (`useLegacyPackaging: false`, the modern default: Android maps them directly and the Play Store compresses downloads). The first release APK was ~97 MB; Skia (13.6 MB per ABI, only used for the loading skeleton) was then replaced by a Reanimated + gradient shimmer: the APK is now 68.8 MB, and the full Maestro suite still passes on the release build.

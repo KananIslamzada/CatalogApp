@@ -24,11 +24,6 @@ jest.mock('@/features/products/data/favourites-repository', () => ({
   removeFavourite: jest.fn(async () => undefined),
 }));
 
-jest.mock('@/features/products/components/product-list-skeleton', () => {
-  const { Text: MockText } = jest.requireActual('react-native');
-  return { __esModule: true, default: () => <MockText>skeleton</MockText> };
-});
-
 const mockedPage = jest.mocked(loadProductsPage);
 const mockedSearch = jest.mocked(searchByName);
 

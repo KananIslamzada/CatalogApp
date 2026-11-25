@@ -27,8 +27,8 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   content: {
     flexGrow: 1,
-    justifyContent: 'center',
     gap: spacing.xxl,
     padding: spacing.xl,
+    paddingTop: spacing.xxl * 2,
   },
 });

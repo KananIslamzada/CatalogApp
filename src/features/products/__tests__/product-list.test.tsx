@@ -18,11 +18,6 @@ jest.mock('../data/favourites-repository', () => ({
 }));
 
 jest.mock('../hooks/use-product-list', () => ({ useProductList: jest.fn() }));
-jest.mock('../components/product-list-skeleton', () => {
-  const { Text: MockText } = jest.requireActual('react-native');
-  return { __esModule: true, default: () => <MockText>skeleton</MockText> };
-});
-
 const mockedUseProductList = jest.mocked(useProductList);
 
 function List({ term }: { term: string }) {
@@ -61,7 +56,7 @@ describe('ProductList', () => {
 
     await renderWithQueryClient(<List term="" />, createClientWithFavourites());
 
-    expect(screen.getByText('skeleton')).toBeOnTheScreen();
+    expect(screen.getByLabelText('Loading products')).toBeOnTheScreen();
     expect(screen.getByText('Catalog header')).toBeOnTheScreen();
   });
 
